@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Thread{% endblock %}
+
+{% block content %}
+  <h1>Расчет резьбового соединения</h1>
+
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
+    <div>
+      <h2> Параметры соединения </h2>
+      <form action="{% url 'thread' %}" method="post">
+      {{ form.as_p }}
+      {% csrf_token %}
+
+      <p><input type="submit" value="Calculate"></p>
+  </form>      
+    </div>
+        
+    <div>
+      <h2> Коэффициенты запаса </h2>
+
+        <div class="safety-block">
+          <p class="safety-factor"> Болт по условию растяжения : <b {% if k_bolt_tension < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_tension }}</b> </p>
+          <p class="safety-factor"> Гайка по условию растяжения : <b {% if k_nut_tension < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_tension }}</b> </p>
+          <p class="safety-factor"> Болт по условию смятия резьбы : <b {% if k_bolt_crush < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_crush }}</b> </p>
+          <p class="safety-factor"> Гайка по условию смятия резьбы : <b {% if k_nut_crush < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_crush }}</b> </p>
+          <p class="safety-factor"> Болт по условию среза резьбы : <b {% if k_bolt_shear < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_shear }}</b> </p>   
+          <p class="safety-factor"> Гайка по условию среза резьбы : <b {% if k_nut_shear < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_shear }}</b> </p>          
+        </div>
+
+
+      <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect" width="270px">   
+    </div>
+
+    <div>
+      <!-- Условный блок для форматирования -->
+    </div>
+
+  </div>
+
+{% endblock %}

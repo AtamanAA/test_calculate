@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Need to calculate{% endblock %}
+
+{% block content %}
+  <h1>Онлайн расчет на прочность типовых элементов конструкций</h1>  
+  
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
+    
+    <div>
+      <h3>Расчет толщины стенки <br> трубы высокого давления</h3>
+      <a href="{% url 'pipe_pressure' %}"><img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure" width="300px"></a>      
+    </div>
+      
+    <div>
+      <h3>Расчет коэфициентов запаса <br> резьбового соединения</h3>
+      <a href="{% url 'thread' %}"><img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect" width="250px"></a>
+    </div>
+
+    <div>
+      <!-- <h2>Мнимый резервный блок</h2> -->
+    </div>   
+
+  </div>
+
+{% endblock %}

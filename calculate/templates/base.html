@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+</head>
+
+<body>
+
+  <div id="header">
+    <span class="logo"><a href="{% url 'index' %}">Считать надо!</a></span>
+    
+    <ul class="menu">
+        <li {% if section == 'pipe_pressure' %} class='selected'{% endif %}>
+            <a href="{% url 'pipe_pressure' %}">Труба высого давления</a>
+        </li>
+        <li {% if section == 'thread' %} class='selected'{% endif %}>
+            <a href="{% url 'thread' %}">Резьбовое соединение</a>
+        </li>
+<!--         <li>
+            <a href="{% url 'sandbox' %}">Песочница</a>
+        </li> -->
+    </ul>
+  </div>
+
+  <div id="content">
+      {% block content %}{% endblock %}
+  </div>
+
+</body>
+
+</html>

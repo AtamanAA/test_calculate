@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sandbox{% endblock %}
+
+{% block content %}
+  <h1>Sandbox</h1>
+
+  <p>***Тестовая страница***</p>
+  <p>***Первое число***</p>
+  <p>***Второе число***</p>
+  <p>***Кнопка "Расчитать"***</p>
+  <img src="{% static 'thread.jpg' %}" alt="My image">
+  
+
+  <form action="{% url 'sandbox' %}" method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Calculate"></p>
+  </form>  
+
+  <p> Сумма: <b {% if summ == 1 %} class="non-valid-variable" {% endif %}>{{ summ }}</b> </p>
+
+  <!-- <p> Сумма: <b class="calculate-variable">{{ summ }}</b> </p> -->
+
+  <p> Умножение: {{ mult }} </p>
+  <p> Деление: {{ div }} </p>
+
+  <a href="{% url 'sandbox_results' %}">Посмотреть результат расчета</a>
+
+{% endblock %}
