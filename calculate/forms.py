@@ -78,8 +78,8 @@ class SumPostForm(forms.Form):
 	#first_number = forms.CharField(max_length=255, label = "Первое число")
 	#second_number = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), label = "Второе число", required = False)
 	#first_number = forms.DecimalField(label = "Первое число", max_value = 500, decimal_places = 3)
-	first_number = forms.FloatField(label = "Первое число", max_value = 50, help_text = "text_2")
-	second_number = forms.FloatField(label = "Второе число", max_value = 50)
+	# first_number = forms.FloatField(label = "Первое число", max_value = 50, help_text = "text_2")
+	# second_number = forms.FloatField(label = "Второе число", max_value = 50)
 	# name = forms.CharField(error_messages={'required': 'Please enter your name'})
 	# os_choice = (
 	# 	('Win10', 'Win10'),
