@@ -1,42 +1,145 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Thread{% endblock %}
+{% block title %}Різьба{% endblock %}
 
 {% block content %}
-  <h1>Расчет резьбового соединения</h1>
+    <section class="thread">
+        <div class="container">
+            <h1>Розрахунок різьбового з’єднання</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+                <div class="col-10 col-md-6 col-xl-5 form">
+                    <h2>Параметри з’єднання</h2>
+                    <form action="{% url 'thread' %}" method="post">
+                        {% csrf_token %}                        
 
-  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
-    <div>
-      <h2> Параметры соединения </h2>
-      <form action="{% url 'thread' %}" method="post">
-      {{ form.as_p }}
-      {% csrf_token %}
+                        <div class="form__string">
+                            {{ form.axial_force.label }}                           
+                            <div class="form__data">
+                                {{ form.axial_force }}
+                                <div class="form__unit">кН</div>                                
+                            </div>
+                        </div>                        
 
-      <p><input type="submit" value="Calculate"></p>
-  </form>      
-    </div>
-        
-    <div>
-      <h2> Коэффициенты запаса </h2>
+                        <div class="form__string">
+                            {{ form.bolt_yield_strength.label }}
+                            <div class="form__data">
+                                {{ form.bolt_yield_strength }}
+                                <div class="form__unit">МПа</div>                                
+                            </div>
+                        </div>
 
-        <div class="safety-block">
-          <p class="safety-factor"> Болт по условию растяжения : <b {% if k_bolt_tension < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_tension }}</b> </p>
-          <p class="safety-factor"> Гайка по условию растяжения : <b {% if k_nut_tension < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_tension }}</b> </p>
-          <p class="safety-factor"> Болт по условию смятия резьбы : <b {% if k_bolt_crush < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_crush }}</b> </p>
-          <p class="safety-factor"> Гайка по условию смятия резьбы : <b {% if k_nut_crush < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_crush }}</b> </p>
-          <p class="safety-factor"> Болт по условию среза резьбы : <b {% if k_bolt_shear < 1 %} class="non-valid-variable" {% endif %}>{{ k_bolt_shear }}</b> </p>   
-          <p class="safety-factor"> Гайка по условию среза резьбы : <b {% if k_nut_shear < 1 %} class="non-valid-variable" {% endif %}>{{ k_nut_shear }}</b> </p>          
+                        <div class="form__string">
+                            {{ form.nut_yield_strength.label }}
+                            <div class="form__data">
+                                {{ form.nut_yield_strength }}
+                                <div class="form__unit">МПа</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.nominal_thread_diameter.label }}
+                            <div class="form__data">
+                                {{ form.nominal_thread_diameter }}
+                                <div class="form__unit">мм</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.thread_pitch.label }}
+                            <div class="form__data">
+                                {{ form.thread_pitch }}
+                                <div class="form__unit">мм</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.nut_active_height.label }}
+                            <div class="form__data">
+                                {{ form.nut_active_height }}
+                                <div class="form__unit">мм</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.nut_minimum_diameter.label }}
+                            <div class="form__data">
+                                {{ form.nut_minimum_diameter }}
+                                <div class="form__unit">мм</div>                                
+                            </div>
+                        </div>
+                        <div>{{ form.errors.nut_minimum_diameter }}</div>
+
+                        <div class="form__string">
+                            {{ form.bolt_hole_diameter.label }}                            
+                            <div class="form__data">
+                                {{ form.bolt_hole_diameter }}
+                                <div class="form__unit">мм</div>                                
+                            </div>                                                        
+                        </div>
+                        <div>{{ form.errors.bolt_hole_diameter }}</div>
+
+                        <div class="form__string">
+                            {{ form.k_industry.label }}
+                            <div class="form__data">
+                                {{ form.k_industry }}                                
+                            </div>
+                        </div>
+
+                        <div class="form__string form__select">
+                            {{ form.k_thread.label }}
+                            <div class="form__data">
+                                {{ form.k_thread }}                                
+                            </div>
+                        </div>
+                        
+                        <p><input class="btn-calculate" type="submit" value="Рахувати різьбу"></p>                        
+                    </form>
+
+                </div>
+                <div class="col-10 col-md-6 col-xl-4 results">
+                    <h2>Коефіцієнти запасу</h2>
+
+                    <div class="safety">
+                        <div class="safety__string">
+                            <div class="safety__factor">Болт за умови розтягнення</div>
+                            <div class="safety__value {% if k_bolt_tension < 1 %} safety__alert {% endif %}">{{ k_bolt_tension }}</div>
+                        </div>
+
+                        <div class="safety__string">
+                            <div class="safety__factor">Гайка за умови розтягнення</div>
+                            <div class="safety__value {% if k_nut_tension < 1 %} safety__alert {% endif %}">{{ k_nut_tension }}</div>
+                        </div>
+
+                        <div class="safety__string">
+                            <div class="safety__factor">Болт за умови зім'яття різьби</div>
+                            <div class="safety__value {% if k_bolt_crush < 1 %} safety__alert {% endif %}">{{ k_bolt_crush }}</div>
+                        </div>
+
+                        <div class="safety__string">
+                            <div class="safety__factor">Гайка за умови зім'яття різьби</div>
+                            <div class="safety__value {% if k_nut_crush < 1 %} safety__alert {% endif %}">{{ k_nut_crush }}</div>
+                        </div>
+
+                        <div class="safety__string">
+                            <div class="safety__factor">Болт за умови зрізу різьби</div>
+                            <div class="safety__value {% if k_bolt_shear < 1 %} safety__alert {% endif %}">{{ k_bolt_shear }}</div>
+                        </div>
+
+                        <div class="safety__string">
+                            <div class="safety__factor">Гайка за умови зрізу різьби</div>
+                            <div class="safety__value {% if k_nut_shear < 1 %} safety__alert {% endif %}">{{ k_nut_shear }}</div>
+                        </div>
+                        
+                        <img src="../../static/images/thread_conect.jpg" alt="thread_conect">
+
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-
-
-      <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect" width="270px">   
-    </div>
-
-    <div>
-      <!-- Условный блок для форматирования -->
-    </div>
-
-  </div>
+    </section>
 
 {% endblock %}

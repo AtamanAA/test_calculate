@@ -1,27 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Need to calculate{% endblock %}
+{% block title %}Рахувати треба{% endblock %}
 
 {% block content %}
-  <h1>Онлайн расчет на прочность типовых элементов конструкций</h1>  
-  
-  <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
-    
-    <div>
-      <h3>Расчет толщины стенки <br> трубы высокого давления</h3>
-      <a href="{% url 'pipe_pressure' %}"><img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure" width="300px"></a>      
-    </div>
-      
-    <div>
-      <h3>Расчет коэфициентов запаса <br> резьбового соединения</h3>
-      <a href="{% url 'thread' %}"><img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect" width="250px"></a>
-    </div>
-
-    <div>
-      <!-- <h2>Мнимый резервный блок</h2> -->
-    </div>   
-
-  </div>
+    <section class="home">
+        <div class="container">            
+            <h1>онлайн разрахунок на міцність</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 ">
+                <div class="col">
+                    <div class="card h-100">
+                        <h4 class="card-header">Товшина стінки труби високого тиску</h4>
+                        <div class="card-body">
+                          <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
+                          <a href="{% url 'pipe_pressure' %}" class="btn btn-primary">Рахувати трубу</a>
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <h4 class="card-header">Коєфіцієнти міцності різьбового з’єднання</h4>
+                        <div class="card-body">
+                          <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect">
+                          <a href="{% url 'thread' %}" class="btn btn-primary">Рахувати різьбу</a>
+                        </div>
+                      </div>
+                </div>
+                <!-- <div class="col">
+                    <div class="card h-100">
+                        <h4 class="card-header">Витривалість стержня</h4>
+                        <div class="card-body">
+                          <h5 class="card-title">Special title treatment</h5>
+                          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                          <a href="#" class="btn btn-primary">Рахувати стержень</a>
+                        </div>
+                      </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

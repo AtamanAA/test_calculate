@@ -6,17 +6,32 @@
 {% block content %}
   <h1>Sandbox</h1>
 
-  <p>***Тестовая страница***</p>
-  <p>***Первое число***</p>
-  <p>***Второе число***</p>
-  <p>***Кнопка "Расчитать"***</p>
-  <img src="{% static 'thread.jpg' %}" alt="My image">
-  
-
   <form action="{% url 'sandbox' %}" method="post">
-    {{ form.as_p }}
     {% csrf_token %}
+    <div class="form">
+      <div class="input">
+        {{ form.as_p }}
+      </div>
+      <div class="units">
+        <div>МПа</div>
+        <div>мм</div>
+      </div>           
+    </div>    
     <p><input type="submit" value="Calculate"></p>
+
+    <!-- Вывод формы по элементам с назначением уникальных классов и ИД: -->
+    <div>
+      {{ form.first_number.help_text }}
+    </div>
+
+    <label for="{{ form.first_number.id_for_label }}" class="form-label">{{ form.first_number.label }}: </label>
+    <input name="{{ form.first_number.html_name }}" type="text" class="form-control" id="{{ form.first_number.id_for_label }}" required>
+    
+    <!-- Вывод формы по элементам без назначений классов -->
+    <label>{{ form.first_number.label }}: </label>
+    <input name="{{ form.first_number.html_name }}" type="text" required>
+
+
   </form>  
 
   <p> Сумма: <b {% if summ == 1 %} class="non-valid-variable" {% endif %}>{{ summ }}</b> </p>
