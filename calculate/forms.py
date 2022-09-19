@@ -7,7 +7,7 @@ class PipePressureThickness(forms.Form):
 	yield_strength = forms.FloatField(label = "Межа текучості матеріалу", min_value=1, max_value = 3000, initial = 300)
 	test_pressure = forms.FloatField(label = "Розрахунковий тиск (p)", min_value=0.001, max_value = 3000,)
 	min_outside_diameter = forms.FloatField(label = "Зовнішній діаметр (D)", min_value=1, max_value = 10000,)	
-	k_industry = forms.FloatField(label = "Заданний коєфіциент запасу", min_value=1, max_value = 10, initial = 1.3)
+	k_industry = forms.FloatField(label = "Заданий коефіцієнт запасу", min_value=1, max_value = 10, initial = 1.3)
 	k_cycle = forms.FloatField(label = "Коефіцієнт запасу на витривалість", min_value=1, max_value = 10, initial = 1)
 		
 	k_welding_choice = (
@@ -29,7 +29,7 @@ class ThreadForm(forms.Form):
 	nut_active_height = forms.FloatField(label = "Висота гайки (L)", min_value=1, max_value = 1000, help_text = "мм")
 	nut_minimum_diameter = forms.FloatField(label = "Зовнішній діаметр гайки (Dг)", min_value=2, max_value = 1500, help_text = "мм")
 	bolt_hole_diameter = forms.FloatField(label = "Діаметр отвору в болті (Dо)", min_value=0, max_value = 990, initial = 0, help_text = "мм")
-	k_industry = forms.FloatField(label = "Заданний коєфіциент запасу", min_value=1, max_value = 10, initial = 1.3)
+	k_industry = forms.FloatField(label = "Заданий коефіцієнт запасу", min_value=1, max_value = 10, initial = 1.3)
 
 	k_thread_choice = (
 		(0.8, 'Метрична'),
