@@ -98,38 +98,6 @@
 
         </div>
 
-    </section>
-
-
-<!-- 
-
-    <h1>Расчет толщины стенки трубы высокого давления</h1>
-
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between;">
-        <div>
-            <form action="{% url 'pipe_pressure' %}" method="post">
-                {{ form.as_p }}
-                {% csrf_token %}
-            
-                {% if thickness >= outside_radius %}
-                <p> Толщина стенки (s), мм: <b class="non-valid-variable" >{{ thickness }}</b> </p>
-                {% if thickness != zero %}
-                    <p id=thikness_error > Толщина стенки равна или превышает наружный радиус </p>
-                {% endif %}          
-                {% endif %}
-      
-                {% if thickness < outside_radius %}
-                    <p> Толщина стенки (s), мм: <b>{{ thickness }}</b> </p>
-                {% endif %}
-      
-                <p><input type="submit" value="Рассчитать"></p>
-            </form>      
-        </div>     
-    <div>
-        <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure" width="250px">      
-    </div>
-
-  </div> -->
-    
+    </section>  
 
 {% endblock %}

@@ -8,27 +8,33 @@
         <div class="container">            
             <h1>онлайн разрахунок на міцність</h1>
             <div class="home__subtitle-line"></div>
+
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 ">
+
                 <div class="col">
                     <div class="card h-100">
                         <h4 class="card-header">Товшина стінки труби високого тиску</h4>
                         <div class="card-body">
-                          <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
-                          <a href="{% url 'pipe_pressure' %}" class="btn btn-primary">Рахувати трубу</a>
+                            <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
+                            <a href="{% url 'pipe_pressure' %}" class="btn btn-primary">Рахувати трубу</a>
                         </div>
-                      </div>
+                    </div>
                 </div>
+
                 <div class="col">
                     <div class="card h-100">
                         <h4 class="card-header">Коєфіцієнти міцності різьбового з’єднання</h4>
                         <div class="card-body">
-                          <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect">
-                          <a href="{% url 'thread' %}" class="btn btn-primary">Рахувати різьбу</a>
+                            <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect">
+                            <a href="{% url 'thread' %}" class="btn btn-primary">Рахувати різьбу</a>
                         </div>
-                      </div>
+                    </div>
                 </div>
+
             </div>
+
         </div>
+        
     </section>
 
 {% endblock %}
