@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import PipePressureThickness, ThreadForm
 from .services import pipe_thickness, Thread
+from .models import Material
 
 
 def index(request):
@@ -87,3 +88,8 @@ def thread(request):
 					'k_nut_crush': k_nut_crush,
 					'k_bolt_shear': k_bolt_shear,
 					'k_nut_shear': k_nut_shear,})
+
+def materials(request):
+	"""Materials table"""
+	materials_list = Material.get_all()
+	return render(request, 'calculate/materials.html', {'materials_list':materials_list})
