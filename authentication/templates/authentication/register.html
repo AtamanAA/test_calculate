@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block content %}
+
+    <section class="auth">
+        <div class="container">
+            {% if form.errors %}
+                <div class="alert alert-warning" role="alert">
+                    Заповніть коректно форму:
+                    <!-- {{form.errors}} -->
+                    <div class="registration_messages">
+                        <ul>
+                            <li>Адреса пошти не коректна</li>
+                            <li>Два поля пароля не збігаються.</li>
+                            <li>Цей пароль занадто короткий. Він повинен містити не менше 8 символів.</li>
+                            <li>Цей пароль надто поширений.</li>
+                        </ul>
+                    </div>
+                </div>               
+            {% endif %}
+
+            <h1>Реєстрація</h1>
+            <div class="auth__subtitle-line"></div>
+
+            <div class="row">
+                <div class="col-12 form">
+                    <form action="{% url 'register' %}" method="post">
+                        {% csrf_token %}
+                        {{form.as_p}}                        
+                        <p>
+                            <span></span>
+                            <input class="btn-register" type="submit" value="Зареєструватися">
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>  
+
+{% endblock %}

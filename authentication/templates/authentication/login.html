@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Увійти{% endblock %}
+
+{% block content %}
+
+    <section class="auth">
+        <div class="container">
+            <h1>Увійти</h1>
+            <div class="auth__subtitle-line"></div>
+            <div class="row">
+                <div class="col-12 form">
+                    <form action="{% url 'login' %}" method="post" >
+                        {% csrf_token %}
+
+                        <p>
+                            <label for="">Ім'я</label>
+                            <input type="text" class="auth__field" name="username">
+                        </p>
+
+                        <p>
+                            <label for="">Пароль</label>
+                            <input type="password" class="auth__field" name="password">
+                        </p>
+
+                        <p>
+                            <span></span>
+                            <input class="btn-register" type="submit" value="Увійти">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>  
+
+{% endblock %}
