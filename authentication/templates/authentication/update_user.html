@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Кабінет{% endblock %}
+
+{% block content %}
+
+    <section class="auth">
+        <div class="container">
+            <h1>Кабінет користувача</h1>
+            <div class="auth__subtitle-line"></div>
+
+            <div class="row">
+                <div class="col-12 form">
+                    <form action="{% url 'update_user' %}" method="post">
+                        {% csrf_token %}
+                        <p>
+                            <label for="id_username">{{ form.username.label }}</label>
+                            {{ form.username }}
+                        </p>
+                        <p>
+                            <label for="id_email">{{ form.email.label }}</label>
+                            {{ form.email }}
+                        </p>                        
+                        <p>
+                            <span></span>
+                            <input class="btn-register" type="submit" value="Зберегти">
+                        </p>
+                        <p>
+                            <span></span>
+                            <a class="btn-password" href="{% url 'change_password' %}">Змінити пароль</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>  
+
+{% endblock %}

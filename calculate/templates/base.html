@@ -25,8 +25,6 @@
 </head>
 
 <body>
-
-
     <nav class="navbar navbar-expand-md navbar navbar-dark">
 
         <div class="container">
@@ -37,21 +35,53 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link" id="home" aria-current="page" href="{% url 'index' %}">Домашня</a>
+                        <a class="nav-link" id="pipe" href="{% url 'pipe_pressure' %}">Труба</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pipe" href="{% url 'pipe_pressure' %}">Труба високого тиску</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="thread" href="{% url 'thread' %}">Різьбове з’єднання</a>
+                        <a class="nav-link" id="thread" href="{% url 'thread' %}">Різьба</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="materials" href="{% url 'materials' %}">Матеріали</a>
                     </li>
                 </ul>
+                <span class="navbar-text">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">                            
+                                <a class="nav-link" id="username" href="{% url 'update_user' %}">{{ user.username }}</a>                            
+                            </li>
+                            <li class="nav-item">                            
+                                <a class="nav-link" id="logout" href="{% url 'logout' %}">Вийти</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" id="register" href="{% url 'register' %}">Реєстрація</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="login" href="{% url 'login' %}">Увійти</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </span>
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="alert alert-warning" role="alert">
+                        {{message}}
+                    </div>                
+                {% else %}
+                    <div class="alert alert-success" role="alert">
+                        {{message}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
 
     <div id="content">
         {% block content %}{% endblock %}
@@ -63,10 +93,10 @@
             <div class="footer__dev">Розробив Олексій Атаманенко</div>
             <div class="footer__social">
                 <a href="https://t.me/Atamanenkoalex" class="footer__social-link">
-                    <img src="../static/icons/telegram.png" alt="telegram">
+                    <img src="/static/icons/telegram.png" alt="telegram">
                 </a>
                 <a href="https://www.linkedin.com/in/AtamanenkoAlex/" class="footer__social-link">
-                    <img src="../static/icons/linkedin.png" alt="linkedin">
+                    <img src="/static/icons/linkedin.png" alt="linkedin">
                 </a>
             </div>
 
