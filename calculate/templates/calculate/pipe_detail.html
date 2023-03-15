@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Труба{% endblock %}
+{% block title %}Труба результат{% endblock %}
 
-{% block content %}
-
+{% block content %}    
+    
     <section class="pipe">
         <div class="container">
             <h1>Розрахунок товщини стінки труби високого тиску</h1>
             <div class="home__subtitle-line"></div>
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6 form">
-                    <form action="{% url 'pipe_pressure' %}" method="post">
+                    <form action="{% url 'pipe_detail' %}" method="post">
                         {% csrf_token %}
 
                         <h2>Параметри труби</h2>
@@ -71,24 +71,19 @@
                         </div>
 
 
-
                         <div class="results">
-                            {% if thickness >= outside_radius %}
-                                {% if thickness == 0 %}
-                                <div class="results__error">Введіть параметри для розрахунку товщини стінки</div>
-                                {% endif %}
+                            {% if thickness_temp >= outside_radius_temp %}
                                     
-                                {% if thickness != 0 %}
+                                {% if thickness_temp != 0 %}
                                 <div class="results__error">Товщина стінки перевищує зовнішній радіус</div>
                                 {% endif %}                                    
-                            {% endif %}               
-
-                      
-                            {% if thickness < outside_radius %}
+                            {% endif %} 
+                    
+                            {% if thickness_temp < outside_radius_temp %}
                                 <div class="results__string">
                                     Товщина стінки (s)
                                     <div class="results__data">
-                                        <div class="results__value">{{ thickness }}</div>
+                                        <div class="results__value">{{ thickness_temp }}</div>
                                         <div class="results__unit">мм</div>
                                     </div>
                                 </div>
@@ -102,18 +97,18 @@
                             </div>
                         </div>
 
-                        <p><input class="btn-calculate" type="submit" value="Рахувати трубу" name="calculate"></p>
-                        <p><input class="btn-calculate" type="submit" value="Зберегти" name="create"></p>
-                    </form>
+                        <input type="hidden" name="pipeid" value="{{ pipe.id }}">
 
+                        <p><input class="btn-calculate" type="submit" value="Рахувати трубу" name="calculate"></p>
+                        <p><input class="btn-calculate" type="submit" value="Зберегти зміни" name="update"></p>
+                        <p><input class="btn-calculate" type="submit" value="Видалити" name="delete"></p>                       
+
+                    </form>
                     
                 </div>
 
                 <div class="col col-sm-8 col-md-8 col-lg-4">
                     <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
-                    <p>                        
-                        <a href="{% url 'pipe_results' %}" style="color: grey;">Збережені</a>
-                    </p>
                 </div>
 
             </div>
@@ -122,6 +117,6 @@
 
         </div>
 
-    </section>  
+    </section>
 
 {% endblock %}
