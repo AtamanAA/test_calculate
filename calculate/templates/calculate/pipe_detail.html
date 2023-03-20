@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Труба результат{% endblock %}
+
+{% block content %}    
+    
+    <section class="pipe">
+
+        <div class="container">
+            
+            <h1>Редагування розрахунку: "{{ pipe.name }}"</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-6 form">
+                    <form action="{% url 'pipe_detail' %}" method="post">
+                        {% csrf_token %}
+                        <h2>Параметри труби</h2>
+
+                        <div class="form__string">
+                            {{ form.name.label }}                           
+                            <div class="form__data form__data__name">
+                                {{ form.name }}                               
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.yield_strength.label }}                           
+                            <div class="form__data">
+                                {{ form.yield_strength }}
+                                <div class="form__unit">МПа</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.test_pressure.label }}                           
+                            <div class="form__data">
+                                {{ form.test_pressure }}
+                                <div class="form__unit">МПа</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.min_outside_diameter.label }}                           
+                            <div class="form__data">
+                                {{ form.min_outside_diameter }}
+                                <div class="form__unit">мм</div>                                
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.k_industry.label }}                           
+                            <div class="form__data">
+                                {{ form.k_industry }}
+                                <div class="form__unit"></div>                             
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.k_cycle.label }}                           
+                            <div class="form__data">
+                                {{ form.k_cycle }}
+                                <div class="form__unit"></div>                              
+                            </div>
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.k_welding.label }}                           
+                            <div class="form__data form__data__welding">
+                                {{ form.k_welding }}                              
+                            </div>
+                        </div>
+
+                        <div class="results">
+                            {% if thickness_temp >= outside_radius_temp %}                                    
+                                {% if thickness_temp != 0 %}
+                                    <div class="results__error">Товщина стінки перевищує зовнішній радіус</div>
+                                {% endif %}                                                                   
+                            {% endif %} 
+                    
+                            {% if thickness_temp < outside_radius_temp %}
+                                <div class="results__string">
+                                    Товщина стінки (s)
+                                    <div class="results__data">
+                                        <div class="results__value">{{ thickness_temp }}</div>
+                                        <div class="results__unit">мм</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form__string">
+                            {{ form.description.label }} 
+                            <div class="form__data form__data__description">
+                                {{ form.description }} 
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="pipeid" value="{{ pipe.id }}">
+                       
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="calculate">Рахувати трубу</button>                                                    
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="update">Застосувати</button>
+                            <button type="submit" class="btn btn-outline-danger btn-lg btn-custom-danger" name="delete">Видалити</button>
+                        </div> 
+
+                    </form>
+                    
+                </div>
+
+                <div class="col col-sm-8 col-md-8 col-lg-4">
+                    <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

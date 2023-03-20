@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Труба результати{% endblock %}
+
+{% block content %}
+
+    <section class="pipe-results">
+
+        <div class="container">
+            
+            <h1>Результати разрахунку труби високого тиску</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+                <div class="col-12">
+                    {% if pipe_results %}
+                        <table class="table">
+                            <tr class="table__header">
+                                <th>Назва</th>
+                                <!-- <th>Опис</th> -->
+                                <th>Межа текучості матеріалу (Gт)</th>
+                                <th>Розрахунковий тиск (p)</th>
+                                <th>Зовнішній діаметр (D)</th>
+                                <!-- <th>Заданий коефіцієнт запасу</th>
+                                <th>Коефіцієнт запасу на витривалість</th>
+                                <th>Вид труби</th> -->
+                                <th>Товщина стінки (s)</th>
+                                <th id="edit-col">Edit</th>
+                            </tr>
+                            {% for pipe in pipe_results %}
+                                <tr>
+                                    <td class="table__name">{{ pipe.name }}</td>
+                                    <!-- <td class="table__type">{{ pipe.description }}</td> -->
+                                    <td class="table__condition">{{ pipe.yield_strength }}</td>
+                                    <td class="table__hardness">{{ pipe.test_pressure }}</td>
+                                    <td class="table__yield_strenght">{{ pipe.min_outside_diameter }}</td>
+                                    <!-- <td class="table__yield_strenght">{{ pipe.k_industry }}</td> 
+                                    <td class="table__yield_strenght">{{ pipe.k_cycle }}</td> 
+                                    <td class="table__yield_strenght">{{ pipe.k_welding }}</td>  -->
+                                    <td class="table__yield_strenght">{{ pipe.thickness }}</td>
+                                    <td id="edit-col">
+                                        <form action="{% url 'pipe_detail' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pipeid" value="{{ pipe.id }}">                                        
+                                            <button class="detail-button">
+                                                <img id="pipe-detail-icon" class="detail-icon" src="/static/icons/pencil-square.svg" alt="edit">
+                                            </button> 
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}                        
+                        <h2>У Вас ще немає збережених розрахунків</h2>
+                    {% endif %}                    
+                </div>
+            </div>
+
+        </div>
+
+    </section>  
+
+{% endblock %}

@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from .forms import PipePressureThickness, ThreadForm
-from .services import pipe_thickness, Thread
-from .models import Material
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import PipeHighPressureForm, ThreadForm
+from .services import Thread
+from .models import Material, PipeHighPressure
 
 
 def index(request):
@@ -13,32 +14,107 @@ def pipe_pressure(request):
 	# Initial value
 	thickness = 0
 	outside_radius = 0
-	zero = 0
+
+	if request.user.is_authenticated:
+		last_pipe_results = PipeHighPressure.get_by_user_order_by_created(request.user.id)[:5]		
+	else:
+		last_pipe_results = []	
 
 	if request.method == 'POST':
-		form = PipePressureThickness(request.POST)
-		if form.is_valid():
-			# Form processing
+		form = PipeHighPressureForm(request.POST)
+		if form.is_valid():			
 			yield_strength = form.cleaned_data['yield_strength']
 			test_pressure = form.cleaned_data['test_pressure']
 			min_outside_diameter = form.cleaned_data['min_outside_diameter']
 			k_welding = form.cleaned_data['k_welding']
 			k_industry = form.cleaned_data['k_industry']
 			k_cycle = form.cleaned_data['k_cycle']
+			name = form.cleaned_data['name']
+			description = form.cleaned_data['description']
 
-			# Calculate parametr
-			thickness = pipe_thickness(yield_strength, test_pressure, 
-										min_outside_diameter, k_welding, 
-										k_industry, k_cycle)
-			outside_radius = min_outside_diameter / 2
-			
+			pipe = PipeHighPressure.calculate(yield_strength, test_pressure, min_outside_diameter, 
+												k_industry, k_cycle, k_welding)
+			thickness = pipe.thickness
+			outside_radius = pipe.outside_radius
+
+			if 'create' in request.POST:
+				# Save calculate in BD
+				if PipeHighPressure.create(request.user, yield_strength, test_pressure, min_outside_diameter, 
+										k_industry, k_cycle, k_welding, name, description):
+					messages.success(request, ("Розрахунок успішно збережено!"))
+				else:
+					messages.error(request, ("Розрахунок не вдалося зберегти, т.к. товщина стінки перевищує зовнішній радіус "))
+
 	else:
-		form = PipePressureThickness()	
+		form = PipeHighPressureForm()	
 	return render(request, 'calculate/pipe_pressure.html', 
 					{'form': form,
 					 'thickness': thickness,
 					 'outside_radius': outside_radius,
-					 'zero': zero,})
+					 'last_pipe_results': last_pipe_results,})
+
+def pipe_results(request):
+	"""Pipe pressure results table"""		
+	if request.user.is_authenticated:
+		if request.user.is_superuser:
+			pipe_results = PipeHighPressure.get_all()
+		else:
+			pipe_results = PipeHighPressure.get_by_user(request.user.id)
+		return render(request, 'calculate/pipe_results.html', {'pipe_results':pipe_results})
+	else:		
+		return redirect('login')
+
+def pipe_detail(request):
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			pipe_id = request.POST['pipeid']
+			pipe = PipeHighPressure.get_by_id(pipe_id)
+			form = PipeHighPressureForm(request.POST)
+
+			if form.is_valid():
+				yield_strength = form.cleaned_data['yield_strength']
+				test_pressure = form.cleaned_data['test_pressure']
+				min_outside_diameter = form.cleaned_data['min_outside_diameter']
+				k_welding = form.cleaned_data['k_welding']
+				k_industry = form.cleaned_data['k_industry']
+				k_cycle = form.cleaned_data['k_cycle']
+				name = form.cleaned_data['name']
+				description = form.cleaned_data['description']
+
+			if 'calculate' in request.POST:
+				pipe_temp = PipeHighPressure.calculate(yield_strength, test_pressure, min_outside_diameter, 
+														k_industry, k_cycle, k_welding)
+				thickness_temp = pipe_temp.thickness
+				outside_radius_temp = pipe_temp.outside_radius
+				return render(request, 'calculate/pipe_detail.html', {'pipe':pipe, 'form': form, 
+																		'thickness_temp': thickness_temp, 
+																		'outside_radius_temp':outside_radius_temp})
+
+			elif 'update' in request.POST:
+				if pipe.update(yield_strength, test_pressure, min_outside_diameter, 
+							k_industry, k_cycle, k_welding, name, description):
+					messages.success(request, (f"Розрахунок {pipe.name} успішно змінено!"))
+					return redirect('pipe_results')
+				else:
+					messages.error(request, ("Розрахунок не вдалося зберегти, т.к. товщина стінки перевищує зовнішній радіус "))
+					return render(request, 'calculate/pipe_detail.html', {'pipe':pipe, 'form':form})
+
+			elif 'delete' in request.POST:
+				pipe_name = pipe.name
+				pipe.delete_by_id(pipe_id)
+				messages.error(request, (f"Ви видалили розрахунок {pipe_name}!"))
+				return redirect('pipe_results')
+			else:
+				form = PipeHighPressureForm(initial = pipe.to_dict())
+				thickness_temp = pipe.thickness
+				outside_radius_temp = pipe.outside_radius
+				return render(request, 'calculate/pipe_detail.html', {'pipe':pipe, 'form':form, 
+																		'thickness_temp':thickness_temp,
+																		'outside_radius_temp':outside_radius_temp})
+		else:
+			messages.error(request, ("Оберіть розрахунок!"))		
+			return redirect('pipe_results')
+	return redirect('index')
 
 
 def thread(request):
@@ -88,6 +164,7 @@ def thread(request):
 					'k_nut_crush': k_nut_crush,
 					'k_bolt_shear': k_bolt_shear,
 					'k_nut_shear': k_nut_shear,})
+
 
 def materials(request):
 	"""Materials table"""
