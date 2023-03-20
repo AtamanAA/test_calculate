@@ -6,19 +6,20 @@
 {% block content %}    
     
     <section class="pipe">
+
         <div class="container">
-            <h1>Розрахунок товщини стінки труби високого тиску</h1>
+            
+            <h1>Редагування розрахунку: "{{ pipe.name }}"</h1>
             <div class="home__subtitle-line"></div>
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6 form">
                     <form action="{% url 'pipe_detail' %}" method="post">
                         {% csrf_token %}
-
                         <h2>Параметри труби</h2>
 
                         <div class="form__string">
                             {{ form.name.label }}                           
-                            <div class="form__data">
+                            <div class="form__data form__data__name">
                                 {{ form.name }}                               
                             </div>
                         </div>
@@ -70,13 +71,11 @@
                             </div>
                         </div>
 
-
                         <div class="results">
-                            {% if thickness_temp >= outside_radius_temp %}
-                                    
+                            {% if thickness_temp >= outside_radius_temp %}                                    
                                 {% if thickness_temp != 0 %}
-                                <div class="results__error">Товщина стінки перевищує зовнішній радіус</div>
-                                {% endif %}                                    
+                                    <div class="results__error">Товщина стінки перевищує зовнішній радіус</div>
+                                {% endif %}                                                                   
                             {% endif %} 
                     
                             {% if thickness_temp < outside_radius_temp %}
@@ -92,16 +91,18 @@
 
                         <div class="form__string">
                             {{ form.description.label }} 
-                            <div class="form__data">
+                            <div class="form__data form__data__description">
                                 {{ form.description }} 
                             </div>
                         </div>
 
                         <input type="hidden" name="pipeid" value="{{ pipe.id }}">
-
-                        <p><input class="btn-calculate" type="submit" value="Рахувати трубу" name="calculate"></p>
-                        <p><input class="btn-calculate" type="submit" value="Зберегти зміни" name="update"></p>
-                        <p><input class="btn-calculate" type="submit" value="Видалити" name="delete"></p>                       
+                       
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="calculate">Рахувати трубу</button>                                                    
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="update">Застосувати</button>
+                            <button type="submit" class="btn btn-outline-danger btn-lg btn-custom-danger" name="delete">Видалити</button>
+                        </div> 
 
                     </form>
                     
@@ -112,8 +113,6 @@
                 </div>
 
             </div>
-
-            
 
         </div>
 

@@ -1,5 +1,32 @@
+.btn-custom
+    margin: 16px 50px 0 auto    
+    width: 220px
+    color: $btn-color
+    border-color: $btn-color
+.btn-custom:hover
+    color: #fff
+    background-color: $btn-color
+    border-color: $btn-color
+
+.btn-custom-more
+    margin: 0 auto 0 auto
+    width: 220px
+
+.btn-custom-login
+    margin: 16px auto 0 auto
+    width: 220px
+
+.btn-custom-danger
+    margin: 16px 50px 0 auto
+    width: 220px
+
+.btn-block
+    display: flex
+    flex-direction: column
+    
+    
 .btn-calculate
-    width: 330px
+    width: 300px
     height: 60px
     background: $btn-color
     border-radius: 10px
@@ -10,6 +37,39 @@
     align-items: center
     text-align: center
     color: #FFFFFF
+    display: block
+    margin: 30px auto 0 auto
+
+.btn-save
+    width: 300px
+    height: 60px
+    // background: #0765f2
+    background: #656566
+    border-radius: 10px
+    border: none
+    font-weight: 400
+    font-size: 24px
+    line-height: 28px
+    align-items: center
+    text-align: center
+    color: #FFFFFF
+    display: block
+    margin: 0 auto 0 auto
+
+.btn-delete
+    width: 300px
+    height: 60px
+    background: #f22b07
+    border-radius: 10px
+    border: none
+    font-weight: 400
+    font-size: 24px
+    line-height: 28px
+    align-items: center
+    text-align: center
+    color: #FFFFFF
+    display: block
+    margin: 0 auto 0 auto
 
 .btn-register
     width: 200px
@@ -36,15 +96,37 @@
     align-items: center
     text-align: center
     color: #FFFFFF
-    text-decoration: none    
+    text-decoration: none
+    // display: block
+    margin: 0 0 0 auto    
 
     // Corect for update user!!!
     a:link, a:visited, a:hover, a:active
         text-decoration: none
-        color: #FFFFFF    
+        color: #FFFFFF
+
+.btn-archive
+    width: 200px
+    height: 40px
+    background: #656566
+    border-radius: 10px
+    border: none
+    font-weight: 400
+    font-size: 20px
+    line-height: 40px
+    align-items: center
+    text-align: center
+    color: #FFFFFF
+    text-decoration: none
+    display: block
+    margin: 0 auto
+
+    a:link, a:visited, a:hover, a:active
+        text-decoration: none
+        color: #FFFFFF
 
 @media (max-width: 576px)
-    .btn-calculate
+    .btn-calculate .btn-save .btn-delete
         width: 280px
 
 

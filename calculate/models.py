@@ -1,29 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
-
-class Material(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=40)    
-    type = models.CharField(max_length=40)
-    condition = models.CharField(max_length=40, blank=True,)
-    hardness = models.FloatField(help_text="HB")
-    yield_strenght = models.FloatField(help_text="МПа")
-
-    def __str__(self):
-        return f"{self.name} {self.type} {self.condition}"
-
-    def __repr__(self):
-        return f"Material(id={self.pk})"
-
-    @staticmethod
-    def get_all():
-        """
-        returns data for json request with QuerySet of all materials
-        """
-        return list(Material.objects.all())
-
 
 class PipeHighPressure(models.Model):
     K_WELDING_CHOICES = [
@@ -32,8 +9,8 @@ class PipeHighPressure(models.Model):
     ]
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    name = models.CharField(max_length=40)
-    description = models.TextField(blank=True, max_length=256)
+    name = models.CharField(max_length=20)
+    description = models.TextField(blank=True, max_length=128)
     yield_strength = models.FloatField(default=300)
     test_pressure = models.FloatField()
     min_outside_diameter = models.FloatField()	
@@ -47,7 +24,7 @@ class PipeHighPressure(models.Model):
         self.allowable_stresses = self.yield_strength / (self.k_industry * self.k_cycle)
         self.thickness_pipe = (self.test_pressure * self.min_outside_diameter /
                     (2 * self.allowable_stresses * float(self.k_welding) + self.test_pressure))
-        self.thickness_round = round(self.thickness_pipe, 3)
+        self.thickness_round = round(self.thickness_pipe, 2)
         return self.thickness_round
 
     @property
@@ -67,26 +44,14 @@ class PipeHighPressure(models.Model):
     @staticmethod
     def get_by_user(user_id):
         return PipeHighPressure.objects.filter(user=user_id)
+    
+    @staticmethod
+    def get_by_user_order_by_created(user_id):
+        return PipeHighPressure.objects.filter(user=user_id).order_by('created_at',).reverse()
 
     @staticmethod
     def get_all():
         return list(PipeHighPressure.objects.all())
-
-    def to_dict(self):
-        pipe_dict = {"id": self.id,
-                    "user": self.user,
-                    "name": self.name,
-                    "description": self.description,
-                    "yield_strength": self.yield_strength,
-                    "test_pressure": self.test_pressure,
-                    "min_outside_diameter": self.min_outside_diameter,
-                    "k_industry": self.k_industry,
-                    "k_cycle": self.k_cycle,
-                    "k_welding": self.k_welding,
-                    "created_at": self.created_at,
-                    "thickness": self.thickness,
-                    }
-        return pipe_dict
 
     @staticmethod
     def calculate(yield_strength, test_pressure, min_outside_diameter, k_industry, k_cycle, k_welding):
@@ -111,6 +76,15 @@ class PipeHighPressure(models.Model):
             pipe.save()
             return True
         else:
+            return False
+
+    @staticmethod
+    def delete_by_id(pipe_id):
+        try:
+            pipe = PipeHighPressure.objects.get(pk=pipe_id)
+            pipe.delete()
+            return True
+        except:
             return False        
 
     def update(self, yield_strength=None, test_pressure=None, min_outside_diameter=None, 
@@ -137,12 +111,40 @@ class PipeHighPressure(models.Model):
         else:
             return False
 
-    @staticmethod
-    def delete_by_id(pipe_id):
-        try:
-            pipe = PipeHighPressure.objects.get(pk=pipe_id)
-            pipe.delete()
-            return True
-        except:
-            return False
+    def to_dict(self):
+        pipe_dict = {"id": self.id,
+                    "user": self.user,
+                    "name": self.name,
+                    "description": self.description,
+                    "yield_strength": self.yield_strength,
+                    "test_pressure": self.test_pressure,
+                    "min_outside_diameter": self.min_outside_diameter,
+                    "k_industry": self.k_industry,
+                    "k_cycle": self.k_cycle,
+                    "k_welding": self.k_welding,
+                    "created_at": self.created_at,
+                    "thickness": self.thickness,
+                    }
+        return pipe_dict
 
+
+class Material(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=40)    
+    type = models.CharField(max_length=40)
+    condition = models.CharField(max_length=40, blank=True,)
+    hardness = models.FloatField(help_text="HB")
+    yield_strenght = models.FloatField(help_text="МПа")
+
+    def __str__(self):
+        return f"{self.name} {self.type} {self.condition}"
+
+    def __repr__(self):
+        return f"Material(id={self.pk})"
+
+    @staticmethod
+    def get_all():
+        """
+        returns data for json request with QuerySet of all materials
+        """
+        return list(Material.objects.all())

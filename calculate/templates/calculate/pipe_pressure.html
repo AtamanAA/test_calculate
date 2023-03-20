@@ -6,7 +6,9 @@
 {% block content %}
 
     <section class="pipe">
+
         <div class="container">
+
             <h1>Розрахунок товщини стінки труби високого тиску</h1>
             <div class="home__subtitle-line"></div>
             <div class="row">
@@ -18,7 +20,7 @@
 
                         <div class="form__string">
                             {{ form.name.label }}                           
-                            <div class="form__data">
+                            <div class="form__data form__data__name">
                                 {{ form.name }}                               
                             </div>
                         </div>
@@ -70,8 +72,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="results">
                             {% if thickness >= outside_radius %}
                                 {% if thickness == 0 %}
@@ -81,8 +81,7 @@
                                 {% if thickness != 0 %}
                                 <div class="results__error">Товщина стінки перевищує зовнішній радіус</div>
                                 {% endif %}                                    
-                            {% endif %}               
-
+                            {% endif %}
                       
                             {% if thickness < outside_radius %}
                                 <div class="results__string">
@@ -97,30 +96,94 @@
 
                         <div class="form__string">
                             {{ form.description.label }} 
-                            <div class="form__data">
+                            <div class="form__data form__data__description">
                                 {{ form.description }} 
                             </div>
                         </div>
 
-                        <p><input class="btn-calculate" type="submit" value="Рахувати трубу" name="calculate"></p>
-                        <p><input class="btn-calculate" type="submit" value="Зберегти" name="create"></p>
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="calculate">Рахувати трубу</button>                                                    
+                            {% if user.is_authenticated %}
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="create">Зберегти</button>
+                            {% endif %}
+                        </div>                       
+                        
                     </form>
-
                     
                 </div>
 
                 <div class="col col-sm-8 col-md-8 col-lg-4">
                     <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
-                    <p>                        
-                        <a href="{% url 'pipe_results' %}" style="color: grey;">Збережені</a>
-                    </p>
+
+                    {% if user.is_authenticated %}
+                        {% if last_pipe_results %}
+                            <div>
+                                <p class="table-title">Ваші останні розрахунки</p>
+                                <table class="table">
+                                    <tr class="table__header">
+                                        <th>Назва</th>                                
+                                        <th>Gт</th>
+                                        <th>p</th>
+                                        <th>D</th>
+                                        <th>s</th>
+                                    </tr>
+                                    {% for pipe in last_pipe_results %}
+                                        <tr>
+                                            <td class="table__name"><div id="pipe-name">{{ pipe.name }}</div></td>                                    
+                                            <td class="table__condition">{{ pipe.yield_strength }}</td>
+                                            <td class="table__hardness">{{ pipe.test_pressure }}</td>
+                                            <td class="table__yield_strenght">{{ pipe.min_outside_diameter }}</td>
+                                            <td class="table__yield_strenght">{{ pipe.thickness }}</td>
+                                            <td id="edit-col">
+                                                <form action="{% url 'pipe_detail' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="pipeid" value="{{ pipe.id }}">
+                                                    <button class="detail-button">
+                                                        <img id="pipe-detail-icon" class="detail-icon" src="/static/icons/pencil-square.svg" alt="edit">
+                                                    </button>                                            
+                                                </form>
+                                            </td>
+                                        </tr>                                
+                                    {% endfor %}
+                                </table>
+                                
+                            </div>
+
+                            <form action="{% url 'pipe_results' %}" method="GET">
+                                {% csrf_token %}                        
+                                <div class="btn-block">
+                                    <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-more" name="more">Усі результати</button>                                                                           
+                                </div>                                            
+                            </form>  
+
+                        {% else %}
+                            <p class="non-result">У Вас ще немає збережених розрахунків</p>                            
+                        {% endif %}
+                        
+                    {% else %}
+                        <div>
+                            <p class="table-title">Для перегляду збережених результатів, авторизуйтеся або зареєструйтеся</p>
+                            <form action="{% url 'login' %}" method="GET">
+                                {% csrf_token %}                        
+                                <div class="btn-block">
+                                    <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-login" name="more">Увійти</button>                                                                           
+                                </div>                                            
+                            </form>
+                            <form action="{% url 'register' %}" method="GET">
+                                {% csrf_token %}                        
+                                <div class="btn-block">
+                                    <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-login" name="more">Реєстрація</button>                                                                           
+                                </div>                                            
+                            </form> 
+                        </div>
+                        
+                    {% endif %}
+                    
                 </div>
 
-            </div>
+            </div>            
 
-            
-
-        </div>
+        </div>        
 
     </section>  
 

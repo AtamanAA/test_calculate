@@ -3,9 +3,9 @@ from django.core.exceptions import ValidationError
 
 
 class PipeHighPressureForm(forms.Form):
-	name = forms.CharField(label = "Назва", max_length=40, required=False)
-	description = forms.CharField(label = "Опис", max_length=256, widget=forms.Textarea, required=False)
-	yield_strength = forms.FloatField(label = "Межа текучості матеріалу",
+	name = forms.CharField(label = "Назва", max_length=20, required=False)
+	description = forms.CharField(label = "Опис", max_length=128, widget=forms.Textarea, required=False)
+	yield_strength = forms.FloatField(label = "Межа текучості матеріалу (Gт)",
 										min_value=1, max_value = 3000, initial = 300)
 	test_pressure = forms.FloatField(label = "Розрахунковий тиск (p)", 
 										min_value=0.001, max_value = 3000,)
@@ -23,7 +23,6 @@ class PipeHighPressureForm(forms.Form):
 	k_welding = forms.ChoiceField(label = "Вид труби", choices=k_welding_choice,
 									widget=forms.Select(attrs={"class": "selector"}))
 	
-
 
 class ThreadForm(forms.Form):	
 	axial_force = forms.FloatField(label = "Осьове навантаження (F)", 

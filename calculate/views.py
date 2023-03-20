@@ -5,7 +5,6 @@ from .services import Thread
 from .models import Material, PipeHighPressure
 
 
-
 def index(request):
 	"""Home page"""
 	return render(request, 'calculate/index.html')
@@ -14,7 +13,12 @@ def pipe_pressure(request):
 	"""Pipe thickness calculation"""
 	# Initial value
 	thickness = 0
-	outside_radius = 0	
+	outside_radius = 0
+
+	if request.user.is_authenticated:
+		last_pipe_results = PipeHighPressure.get_by_user_order_by_created(request.user.id)[:5]		
+	else:
+		last_pipe_results = []	
 
 	if request.method == 'POST':
 		form = PipeHighPressureForm(request.POST)
@@ -46,72 +50,19 @@ def pipe_pressure(request):
 	return render(request, 'calculate/pipe_pressure.html', 
 					{'form': form,
 					 'thickness': thickness,
-					 'outside_radius': outside_radius,})
-
-def thread(request):
-	"""Thread calculation"""
-	# Initial values
-	k_bolt_tension = 0	
-	k_nut_tension = 0	
-	k_bolt_crush = 0
-	k_nut_crush = 0		
-	k_bolt_shear = 0		
-	k_nut_shear = 0
-
-	if request.method == 'POST':
-		form = ThreadForm(request.POST)
-		if form.is_valid():
-			# Form processing
-			axial_force = form.cleaned_data['axial_force']
-			bolt_yield_strength = form.cleaned_data['bolt_yield_strength']
-			nut_yield_strength = form.cleaned_data['nut_yield_strength']
-			nominal_thread_diameter = form.cleaned_data['nominal_thread_diameter']
-			thread_pitch = form.cleaned_data['thread_pitch']
-			nut_active_height = form.cleaned_data['nut_active_height']
-			nut_minimum_diameter = form.cleaned_data['nut_minimum_diameter']
-			bolt_hole_diameter = form.cleaned_data['bolt_hole_diameter']
-			k_industry = form.cleaned_data['k_industry']
-			k_thread = form.cleaned_data['k_thread']
-
-			#Create thread instance
-			thread = Thread(axial_force, bolt_yield_strength, nut_yield_strength, 
-							nominal_thread_diameter, thread_pitch, nut_active_height, 
-							nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread)
-
-			# Calculate safety factors
-			k_bolt_tension = thread.k_bolt_tension		
-			k_nut_tension = thread.k_nut_tension	
-			k_bolt_crush = thread.k_bolt_crush		
-			k_nut_crush = thread.k_nut_crush		
-			k_bolt_shear = thread.k_bolt_shear		
-			k_nut_shear = thread.k_nut_shear
-	else:
-		form = ThreadForm()	
-	return render(request, 'calculate/thread.html',
-					{'form': form, 
-					'k_bolt_tension': k_bolt_tension,
-					'k_nut_tension': k_nut_tension,
-					'k_bolt_crush': k_bolt_crush,
-					'k_nut_crush': k_nut_crush,
-					'k_bolt_shear': k_bolt_shear,
-					'k_nut_shear': k_nut_shear,})
-
-def materials(request):
-	"""Materials table"""
-	materials_list = Material.get_all()
-	return render(request, 'calculate/materials.html', {'materials_list':materials_list})
-
+					 'outside_radius': outside_radius,
+					 'last_pipe_results': last_pipe_results,})
 
 def pipe_results(request):
-	"""Pipe pressure results table"""
-	if request.user.is_superuser:		
-		pipe_results = PipeHighPressure.get_all()
-	elif request.user.is_authenticated:
-		pipe_results = PipeHighPressure.get_by_user(request.user.id)
-	else:
-		pipe_results = []
-	return render(request, 'calculate/pipe_results.html', {'pipe_results':pipe_results})
-
+	"""Pipe pressure results table"""		
+	if request.user.is_authenticated:
+		if request.user.is_superuser:
+			pipe_results = PipeHighPressure.get_all()
+		else:
+			pipe_results = PipeHighPressure.get_by_user(request.user.id)
+		return render(request, 'calculate/pipe_results.html', {'pipe_results':pipe_results})
+	else:		
+		return redirect('login')
 
 def pipe_detail(request):
 	if request.user.is_authenticated:
@@ -163,4 +114,59 @@ def pipe_detail(request):
 		else:
 			messages.error(request, ("Оберіть розрахунок!"))		
 			return redirect('pipe_results')
-	return render(request, 'calculate/1.html', {'pipe':pipe, 'form':form})
+	return redirect('index')
+
+
+def thread(request):
+	"""Thread calculation"""
+	# Initial values
+	k_bolt_tension = 0	
+	k_nut_tension = 0	
+	k_bolt_crush = 0
+	k_nut_crush = 0		
+	k_bolt_shear = 0		
+	k_nut_shear = 0
+
+	if request.method == 'POST':
+		form = ThreadForm(request.POST)
+		if form.is_valid():
+			# Form processing
+			axial_force = form.cleaned_data['axial_force']
+			bolt_yield_strength = form.cleaned_data['bolt_yield_strength']
+			nut_yield_strength = form.cleaned_data['nut_yield_strength']
+			nominal_thread_diameter = form.cleaned_data['nominal_thread_diameter']
+			thread_pitch = form.cleaned_data['thread_pitch']
+			nut_active_height = form.cleaned_data['nut_active_height']
+			nut_minimum_diameter = form.cleaned_data['nut_minimum_diameter']
+			bolt_hole_diameter = form.cleaned_data['bolt_hole_diameter']
+			k_industry = form.cleaned_data['k_industry']
+			k_thread = form.cleaned_data['k_thread']
+
+			#Create thread instance
+			thread = Thread(axial_force, bolt_yield_strength, nut_yield_strength, 
+							nominal_thread_diameter, thread_pitch, nut_active_height, 
+							nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread)
+
+			# Calculate safety factors
+			k_bolt_tension = thread.k_bolt_tension		
+			k_nut_tension = thread.k_nut_tension	
+			k_bolt_crush = thread.k_bolt_crush		
+			k_nut_crush = thread.k_nut_crush		
+			k_bolt_shear = thread.k_bolt_shear		
+			k_nut_shear = thread.k_nut_shear
+	else:
+		form = ThreadForm()	
+	return render(request, 'calculate/thread.html',
+					{'form': form, 
+					'k_bolt_tension': k_bolt_tension,
+					'k_nut_tension': k_nut_tension,
+					'k_bolt_crush': k_bolt_crush,
+					'k_nut_crush': k_nut_crush,
+					'k_bolt_shear': k_bolt_shear,
+					'k_nut_shear': k_nut_shear,})
+
+
+def materials(request):
+	"""Materials table"""
+	materials_list = Material.get_all()
+	return render(request, 'calculate/materials.html', {'materials_list':materials_list})
