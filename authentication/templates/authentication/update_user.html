@@ -21,15 +21,20 @@
                         <p>
                             <label for="id_email">{{ form.email.label }}</label>
                             {{ form.email }}
-                        </p>                        
-                        <p>
-                            <span></span>
-                            <input class="btn-register" type="submit" value="Зберегти">
                         </p>
-                        <div class="btn-password">
-                            <a href="{% url 'change_password' %}">Змінити пароль</a>
+
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom btn-auth" name="update">Зберегти</button>                                                                         
                         </div>
                     </form>
+
+                    <form action="{% url 'change_password' %}" method="GET">
+                        {% csrf_token %}                        
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-change-password" name="more">Змінити пароль</button>                                                                           
+                        </div>                                            
+                    </form>
+
                 </div>
             </div>
 

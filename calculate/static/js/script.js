@@ -11,6 +11,12 @@ if (document.title == "Різьба") {
 else if (document.title == "Труба") {
   $("#pipe").addClass('active')                
 }
+else if (document.title == "Результати разрахунку труби") {
+  $("#pipe").addClass('active')                
+}
+else if (document.title == "Зміна розрахунку труби") {
+  $("#pipe").addClass('active')                
+}
 else if (document.title == "Матеріали") {
   $("#materials").addClass('active')                
 }

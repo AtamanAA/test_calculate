@@ -16,7 +16,15 @@
                         <h4 class="card-header">Товшина стінки труби високого тиску</h4>
                         <div class="card-body">
                             <img src="{% static 'images/pipe_segment.jpg' %}" alt="pipe pressure">
-                            <a href="{% url 'pipe_pressure' %}" class="btn btn-primary">Рахувати трубу</a>
+
+                            <form action="{% url 'pipe_pressure' %}" method="GET">
+                                {% csrf_token %}                        
+                                <div class="btn-block">
+                                    <button type="submit" class="btn btn-outline-success btn-lg btn-home-menu" name="pipe">Рахувати трубу</button>                                                                           
+                                </div>                                            
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -26,7 +34,14 @@
                         <h4 class="card-header">Коєфіцієнти міцності різьбового з’єднання</h4>
                         <div class="card-body">
                             <img src="{% static 'images/thread_conect.jpg' %}" alt="Thread conect">
-                            <a href="{% url 'thread' %}" class="btn btn-primary">Рахувати різьбу</a>
+                        
+                            <form action="{% url 'thread' %}" method="GET">
+                                {% csrf_token %}                        
+                                <div class="btn-block">
+                                    <button type="submit" class="btn btn-outline-success btn-lg btn-home-menu" name="pipe">Рахувати різьбу</button>                                                                           
+                                </div>                                            
+                            </form>
+
                         </div>
                     </div>
                 </div>

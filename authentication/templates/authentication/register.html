@@ -29,11 +29,10 @@
                 <div class="col-12 form">
                     <form action="{% url 'register' %}" method="post">
                         {% csrf_token %}
-                        {{form.as_p}}                        
-                        <p>
-                            <span></span>
-                            <input class="btn-register" type="submit" value="Зареєструватися">
-                        </p>
+                        {{form.as_p}}
+                        <div class="btn-block">
+                            <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom btn-auth" name="register">Зареєструватися</button>                                                                           
+                        </div> 
                     </form>
                 </div>
             </div>
