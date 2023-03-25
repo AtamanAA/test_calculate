@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Результати разрахунку труби{% endblock %}
+{% block title %}Труба результати{% endblock %}
 
 {% block content %}
 
@@ -18,14 +18,14 @@
                             <tr class="table__header">
                                 <th>Назва</th>
                                 <!-- <th>Опис</th> -->
-                                <th>Межа текучості матеріалу (Gт)</th>
-                                <th>Розрахунковий тиск (p)</th>
-                                <th>Зовнішній діаметр (D)</th>
+                                <th>Межа текучості матеріалу</th>
+                                <th>Розрахунковий тиск</th>
+                                <th>Зовнішній діаметр</th>
                                 <!-- <th>Заданий коефіцієнт запасу</th>
                                 <th>Коефіцієнт запасу на витривалість</th>
                                 <th>Вид труби</th> -->
-                                <th>Товщина стінки (s)</th>
-                                <th id="edit-col">Edit</th>
+                                <th>Товщина стінки</th>
+                                <th id="edit-col"></th>
                             </tr>
                             {% for pipe in pipe_results %}
                                 <tr>

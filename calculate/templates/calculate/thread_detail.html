@@ -6,12 +6,12 @@
 {% block content %}
     <section class="thread">
         <div class="container">
-            <h1>Розрахунок різьбового з’єднання</h1>
+            <h1>Редагування розрахунку "{{ thread.name }}"</h1>
             <div class="home__subtitle-line"></div>
             <div class="row">
                 <div class="col-10 col-md-6 col-xl-5 form">
                     <h2>Параметри з’єднання</h2>
-                    <form action="{% url 'thread' %}" method="post">
+                    <form action="{% url 'thread_detail' %}" method="post">
                         {% csrf_token %}
                         
                         <div class="form__string">
@@ -106,13 +106,14 @@
                             <div class="form__data form__data__description">
                                 {{ form.description }} 
                             </div>
-                        </div> 
+                        </div>
+
+                        <input type="hidden" name="threadid" value="{{ thread.id }}">
                         
                         <div class="btn-block">
                             <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="calculate">Рахувати різьбу</button>                                                    
-                            {% if user.is_authenticated %}
-                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="create">Зберегти</button>
-                            {% endif %}
+                            <button type="submit" class="btn btn-outline-success btn-lg btn-custom" name="update">Застосувати</button>
+                            <button type="submit" class="btn btn-outline-danger btn-lg btn-custom-danger" name="delete">Видалити</button>
                         </div> 
                     </form>
 
@@ -152,70 +153,6 @@
                         </div>
                         
                         <img src="../../static/images/thread_conect.jpg" alt="thread_conect">
-
-                        {% if user.is_authenticated %}
-                            {% if last_thread_results %}
-                                <div>
-                                    <p class="table-title">Ваші останні розрахунки</p>
-                                    <table class="table">
-                                        <tr class="table__header">
-                                            <th>Назва</th>                                
-                                            <th>F</th>
-                                            <th>M</th>
-                                            <th>p</th>
-                                            <th>k<sub>min</sub></th>
-                                        </tr>
-                                        {% for thread in last_thread_results %}
-                                            <tr>
-                                                <td class="table__name"><div id="pipe-name">{{ thread.name }}</div></td>                                    
-                                                <td class="table__force">{{ thread.axial_force }}</td>
-                                                <td class="table__nominal_diameter">{{ thread.nominal_thread_diameter }}</td>
-                                                <td class="table__pitch">{{ thread.thread_pitch }}</td>
-                                                <td class="table__k_min">{{ thread.k_min }}</td>
-                                                <td id="edit-col">
-                                                    <form action="{% url 'thread_detail' %}" method="POST">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="threadid" value="{{ thread.id }}">
-                                                        <button class="detail-button">
-                                                            <img id="pipe-detail-icon" class="detail-icon" src="/static/icons/pencil-square.svg" alt="edit">
-                                                        </button>                                            
-                                                    </form>
-                                                </td>
-                                            </tr>                                
-                                        {% endfor %}
-                                    </table>
-                                    
-                                </div>
-
-                                <form action="{% url 'thread_results' %}" method="GET">
-                                    {% csrf_token %}                        
-                                    <div class="btn-block">
-                                        <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-more" name="more">Усі результати</button>                                                                           
-                                    </div>                                            
-                                </form>  
-
-                            {% else %}
-                                <p class="non-result">У Вас ще немає збережених розрахунків</p>                            
-                            {% endif %}
-                            
-                        {% else %}
-                            <div>
-                                <p class="table-title">Для перегляду збережених результатів, авторизуйтеся або зареєструйтеся</p>
-                                <form action="{% url 'login' %}" method="GET">
-                                    {% csrf_token %}                        
-                                    <div class="btn-block">
-                                        <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-login" name="more">Увійти</button>                                                                           
-                                    </div>                                            
-                                </form>
-                                <form action="{% url 'register' %}" method="GET">
-                                    {% csrf_token %}                        
-                                    <div class="btn-block">
-                                        <button type="submit" class="btn btn-outline-secondary btn-lg btn-custom-login" name="more">Реєстрація</button>                                                                           
-                                    </div>                                            
-                                </form> 
-                            </div>
-                            
-                        {% endif %}
 
                     </div>
 

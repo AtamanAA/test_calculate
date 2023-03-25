@@ -24,7 +24,9 @@ class PipeHighPressureForm(forms.Form):
 									widget=forms.Select(attrs={"class": "selector"}))
 	
 
-class ThreadForm(forms.Form):	
+class ThreadForm(forms.Form):
+	name = forms.CharField(label = "Назва", max_length=20, required=False)
+	description = forms.CharField(label = "Опис", max_length=128, widget=forms.Textarea, required=False)	
 	axial_force = forms.FloatField(label = "Осьове навантаження (F)", 
 									min_value=0.001, max_value = 1000, help_text = "кН ")
 	bolt_yield_strength = forms.FloatField(label = "Межа текучості болта", 
@@ -33,7 +35,7 @@ class ThreadForm(forms.Form):
 											min_value=1, max_value = 3000, initial = 300, help_text = "МПа")
 	nominal_thread_diameter = forms.FloatField(label = "Діаметр різьби (M)", 
 												min_value=1, max_value = 1000, help_text = "мм")
-	thread_pitch = forms.FloatField(label = "Шаг різьби", min_value=0.25, 
+	thread_pitch = forms.FloatField(label = "Шаг різьби (p)", min_value=0.25, 
 									max_value = 20, help_text = "мм")
 	nut_active_height = forms.FloatField(label = "Висота гайки (L)", 
 											min_value=1, max_value = 1000, help_text = "мм")

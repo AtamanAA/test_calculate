@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .services import Thread
 
 
 class PipeHighPressure(models.Model):
@@ -148,3 +149,188 @@ class Material(models.Model):
         returns data for json request with QuerySet of all materials
         """
         return list(Material.objects.all())
+
+
+class ThreadConnection(models.Model):
+    K_THREAD_CHOICES = [
+		(0.8, 'Метрична'),
+		(0.65, 'Трапецевидна'),
+        (0.5, 'Прямокутна'),
+    ]
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    name = models.CharField(max_length=20)
+    description = models.TextField(blank=True, max_length=128)
+    axial_force = models.FloatField()
+    bolt_yield_strength = models.FloatField(default=300)
+    nut_yield_strength = models.FloatField(default=300)
+    nominal_thread_diameter = models.FloatField()
+    thread_pitch = models.FloatField()
+    nut_active_height = models.FloatField()
+    nut_minimum_diameter = models.FloatField()
+    bolt_hole_diameter = models.FloatField()
+    k_industry = models.FloatField()
+    k_thread = models.FloatField(max_length=40, choices=K_THREAD_CHOICES, default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Thread {self.name} {self.nominal_thread_diameter} x {self.thread_pitch}"
+
+    def __repr__(self):
+        return f"Thread (id={self.id})"
+
+    @property
+    def __thread(self):
+        object = Thread(self.axial_force, self.bolt_yield_strength, self.nut_yield_strength, 
+                        self.nominal_thread_diameter, self.thread_pitch, self.nut_active_height, 
+                        self.nut_minimum_diameter, self.bolt_hole_diameter, self.k_industry, self.k_thread)
+        return object
+
+    @property    
+    def k_bolt_tension(self): 	
+        return self.__thread.k_bolt_tension
+
+    @property    
+    def k_nut_tension(self): 	
+        return self.__thread.k_nut_tension
+    
+    @property    
+    def k_bolt_crush(self): 	
+        return self.__thread.k_bolt_crush
+
+    @property    
+    def k_nut_crush(self): 	
+        return self.__thread.k_nut_crush
+
+    @property    
+    def k_bolt_shear(self): 	
+        return self.__thread.k_bolt_shear
+
+    @property    
+    def k_nut_shear(self): 	
+        return self.__thread.k_nut_shear
+    
+    @property    
+    def k_min(self):
+        k_min = min(self.k_bolt_tension, self.k_nut_tension, self.k_bolt_crush, self.k_nut_crush, self.k_bolt_shear, self.k_nut_shear)	
+        return k_min
+
+    @staticmethod
+    def get_by_id(thread_id):
+        return ThreadConnection.objects.get(id=thread_id) if ThreadConnection.objects.filter(id=thread_id) else None
+
+    @staticmethod
+    def get_by_user(user_id):
+        return ThreadConnection.objects.filter(user=user_id)
+    
+    @staticmethod
+    def get_by_user_order_by_created(user_id):
+        return ThreadConnection.objects.filter(user=user_id).order_by('created_at',).reverse()
+
+    @staticmethod
+    def get_all():
+        return list(ThreadConnection.objects.all())
+
+    @staticmethod
+    def calculate(axial_force, bolt_yield_strength, nut_yield_strength, nominal_thread_diameter, thread_pitch, 
+                    nut_active_height, nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread):        
+        thread = ThreadConnection()        
+        thread.axial_force = axial_force
+        thread.bolt_yield_strength = bolt_yield_strength
+        thread.nut_yield_strength = nut_yield_strength
+        thread.nominal_thread_diameter = nominal_thread_diameter
+        thread.thread_pitch = thread_pitch
+        thread.nut_active_height = nut_active_height
+        thread.nut_minimum_diameter = nut_minimum_diameter
+        thread.bolt_hole_diameter = bolt_hole_diameter
+        thread.k_industry = k_industry
+        thread.k_thread = k_thread
+        return thread
+
+    @staticmethod
+    def create(user, axial_force, bolt_yield_strength, nut_yield_strength, nominal_thread_diameter, thread_pitch, 
+                nut_active_height, nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread, 
+                name="noname", description = "nodescr"):
+        thread = ThreadConnection().calculate(axial_force, bolt_yield_strength, nut_yield_strength, nominal_thread_diameter, 
+                                                thread_pitch, nut_active_height, nut_minimum_diameter, bolt_hole_diameter, 
+                                                k_industry, k_thread)
+        thread.user = user
+        thread.name = name
+        thread.description = description
+
+        max_bolt_hole_diameter = thread.nominal_thread_diameter - 2 * thread.thread_pitch
+		
+        if thread.bolt_hole_diameter <= max_bolt_hole_diameter:
+            thread.save()
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def delete_by_id(thread_id):
+        try:
+            thread = ThreadConnection.objects.get(pk=thread_id)
+            thread.delete()
+            return True
+        except:
+            return False
+
+    def update(self, axial_force=None, bolt_yield_strength=None, nut_yield_strength=None, 
+                    nominal_thread_diameter=None, thread_pitch=None, nut_active_height=None, 
+                    nut_minimum_diameter=None, bolt_hole_diameter=None, k_industry=None, k_thread=None,
+                    name=None, description=None):
+        if axial_force:
+            self.axial_force = axial_force
+        if bolt_yield_strength:
+            self.bolt_yield_strength = bolt_yield_strength
+        if nut_yield_strength:
+            self.nut_yield_strength = nut_yield_strength
+        if nominal_thread_diameter:
+            self.nominal_thread_diameter = nominal_thread_diameter
+        if thread_pitch:
+            self.thread_pitch = thread_pitch
+        if nut_active_height:
+            self.nut_active_height = nut_active_height
+        if nut_minimum_diameter:
+            self.nut_minimum_diameter = nut_minimum_diameter
+        if bolt_hole_diameter:
+            self.bolt_hole_diameter = bolt_hole_diameter
+        if k_industry:
+            self.k_industry = k_industry
+        if k_thread:
+            self.k_thread = k_thread
+        if name:
+            self.name = name
+        if description:
+            self.description = description
+        max_bolt_hole_diameter = self.nominal_thread_diameter - 2 * self.thread_pitch
+        if self.bolt_hole_diameter <= max_bolt_hole_diameter:
+            self.save()
+            return True
+        else:
+            return False
+
+    def to_dict(self):
+        thread_dict = {"id": self.id,
+                    "user": self.user,
+                    "name": self.name,
+                    "description": self.description,
+                    "axial_force": self.axial_force,
+                    "bolt_yield_strength": self.bolt_yield_strength,
+                    "nut_yield_strength": self.nut_yield_strength,
+                    "nominal_thread_diameter": self.nominal_thread_diameter,
+                    "thread_pitch": self.thread_pitch,
+                    "nut_active_height": self.nut_active_height,
+                    "nut_minimum_diameter": self.nut_minimum_diameter,
+                    "bolt_hole_diameter": self.bolt_hole_diameter,
+                    "k_industry": self.k_industry,
+                    "k_thread": self.k_thread,
+                    "created_at": self.created_at,
+                    "k_bolt_tension": self.k_bolt_tension,
+                    "k_nut_tension": self.k_nut_tension,
+                    "k_bolt_crush": self.k_bolt_crush,
+                    "k_nut_crush": self.k_nut_crush,
+                    "k_bolt_shear": self.k_bolt_shear,
+                    "k_nut_shear": self.k_nut_shear,
+                    }
+        return thread_dict

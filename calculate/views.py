@@ -2,12 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import PipeHighPressureForm, ThreadForm
 from .services import Thread
-from .models import Material, PipeHighPressure
+from .models import Material, PipeHighPressure, ThreadConnection
 
 
 def index(request):
 	"""Home page"""
 	return render(request, 'calculate/index.html')
+
+def materials(request):
+	"""Materials table"""
+	materials_list = Material.get_all()
+	return render(request, 'calculate/materials.html', {'materials_list':materials_list})
 
 def pipe_pressure(request):
 	"""Pipe thickness calculation"""
@@ -125,7 +130,12 @@ def thread(request):
 	k_bolt_crush = 0
 	k_nut_crush = 0		
 	k_bolt_shear = 0		
-	k_nut_shear = 0
+	k_nut_shear = 0	
+
+	if request.user.is_authenticated:
+		last_thread_results = ThreadConnection.get_by_user_order_by_created(request.user.id)[:5]		
+	else:
+		last_thread_results = []
 
 	if request.method == 'POST':
 		form = ThreadForm(request.POST)
@@ -141,9 +151,11 @@ def thread(request):
 			bolt_hole_diameter = form.cleaned_data['bolt_hole_diameter']
 			k_industry = form.cleaned_data['k_industry']
 			k_thread = form.cleaned_data['k_thread']
+			name = form.cleaned_data['name']
+			description = form.cleaned_data['description']
 
 			#Create thread instance
-			thread = Thread(axial_force, bolt_yield_strength, nut_yield_strength, 
+			thread = ThreadConnection.calculate(axial_force, bolt_yield_strength, nut_yield_strength, 
 							nominal_thread_diameter, thread_pitch, nut_active_height, 
 							nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread)
 
@@ -153,7 +165,16 @@ def thread(request):
 			k_bolt_crush = thread.k_bolt_crush		
 			k_nut_crush = thread.k_nut_crush		
 			k_bolt_shear = thread.k_bolt_shear		
-			k_nut_shear = thread.k_nut_shear
+			k_nut_shear = thread.k_nut_shear			
+
+			if 'create' in request.POST:
+				# Save calculate in BD
+				if ThreadConnection.create(request.user, axial_force, bolt_yield_strength, nut_yield_strength, 
+											nominal_thread_diameter, thread_pitch, nut_active_height, 
+											nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread, name, description):
+					messages.success(request, ("Розрахунок успішно збережено!"))					
+				else:
+					messages.error(request, ("Розрахунок не вдалося зберегти, т.к. діаметр отвору перевищую діаметр різьби "))					
 	else:
 		form = ThreadForm()	
 	return render(request, 'calculate/thread.html',
@@ -163,10 +184,94 @@ def thread(request):
 					'k_bolt_crush': k_bolt_crush,
 					'k_nut_crush': k_nut_crush,
 					'k_bolt_shear': k_bolt_shear,
-					'k_nut_shear': k_nut_shear,})
+					'k_nut_shear': k_nut_shear,
+					'last_thread_results': last_thread_results,})
 
 
-def materials(request):
-	"""Materials table"""
-	materials_list = Material.get_all()
-	return render(request, 'calculate/materials.html', {'materials_list':materials_list})
+def thread_results(request):		
+	if request.user.is_authenticated:
+		if request.user.is_superuser:
+			thread_results = ThreadConnection.get_all()
+		else:
+			thread_results = ThreadConnection.get_by_user(request.user.id)
+		return render(request, 'calculate/thread_results.html', {'thread_results':thread_results})
+	else:		
+		return redirect('login')
+
+def thread_detail(request):
+	pass
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			thread_id = request.POST['threadid']
+			thread = ThreadConnection.get_by_id(thread_id)
+			form = ThreadForm(request.POST)
+
+			if form.is_valid():
+				axial_force = form.cleaned_data['axial_force']
+				bolt_yield_strength = form.cleaned_data['bolt_yield_strength']
+				nut_yield_strength = form.cleaned_data['nut_yield_strength']
+				nominal_thread_diameter = form.cleaned_data['nominal_thread_diameter']
+				thread_pitch = form.cleaned_data['thread_pitch']
+				nut_active_height = form.cleaned_data['nut_active_height']
+				nut_minimum_diameter = form.cleaned_data['nut_minimum_diameter']
+				bolt_hole_diameter = form.cleaned_data['bolt_hole_diameter']
+				k_industry = form.cleaned_data['k_industry']
+				k_thread = form.cleaned_data['k_thread']
+				name = form.cleaned_data['name']
+				description = form.cleaned_data['description']
+
+			if 'calculate' in request.POST:
+				thread_temp = ThreadConnection.calculate(axial_force, bolt_yield_strength, nut_yield_strength, 
+															nominal_thread_diameter, thread_pitch, nut_active_height, 
+															nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread)
+				k_bolt_tension = thread_temp.k_bolt_tension		
+				k_nut_tension = thread_temp.k_nut_tension	
+				k_bolt_crush = thread_temp.k_bolt_crush		
+				k_nut_crush = thread_temp.k_nut_crush		
+				k_bolt_shear = thread_temp.k_bolt_shear		
+				k_nut_shear = thread_temp.k_nut_shear			
+				return render(request, 'calculate/thread_detail.html', {'thread':thread, 'form': form, 
+																		'k_bolt_tension': k_bolt_tension,
+																		'k_nut_tension': k_nut_tension,
+																		'k_bolt_crush': k_bolt_crush,
+																		'k_nut_crush': k_nut_crush,
+																		'k_bolt_shear': k_bolt_shear,
+																		'k_nut_shear': k_nut_shear,})
+
+			elif 'update' in request.POST:
+				if thread.update(axial_force, bolt_yield_strength, nut_yield_strength, 
+								nominal_thread_diameter, thread_pitch, nut_active_height, 
+								nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread,
+								name, description):
+					messages.success(request, (f"Розрахунок {thread.name} успішно змінено!"))
+					return redirect('thread_results')
+				else:
+					messages.error(request, ("Розрахунок не вдалося зберегти, т.к. діаметр отвору перевищую діаметр різьби "))
+					return render(request, 'calculate/thread_detail.html', {'thread':thread, 'form':form})
+
+			elif 'delete' in request.POST:
+				thread_name = thread.name
+				thread.delete_by_id(thread_id)
+				messages.error(request, (f"Ви видалили розрахунок {thread_name}!"))
+				return redirect('thread_results')
+			else:
+				form = ThreadForm(initial = thread.to_dict())
+				k_bolt_tension = thread.k_bolt_tension		
+				k_nut_tension = thread.k_nut_tension	
+				k_bolt_crush = thread.k_bolt_crush		
+				k_nut_crush = thread.k_nut_crush		
+				k_bolt_shear = thread.k_bolt_shear		
+				k_nut_shear = thread.k_nut_shear
+				return render(request, 'calculate/thread_detail.html', {'thread':thread, 'form':form, 
+																		'k_bolt_tension': k_bolt_tension,
+																		'k_nut_tension': k_nut_tension,
+																		'k_bolt_crush': k_bolt_crush,
+																		'k_nut_crush': k_nut_crush,
+																		'k_bolt_shear': k_bolt_shear,
+																		'k_nut_shear': k_nut_shear,})
+		else:
+			messages.error(request, ("Оберіть розрахунок!"))		
+			return redirect('thread_results')
+	return redirect('index')
+
+
