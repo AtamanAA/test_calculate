@@ -65,7 +65,6 @@ class ThreadForm(forms.Form):
 		
 		return bolt_hole_diameter
 
-
 	def clean_nut_minimum_diameter(self):		
 		nut_minimum_diameter = self.cleaned_data['nut_minimum_diameter']
 		nominal_thread_diameter = self.cleaned_data['nominal_thread_diameter']		

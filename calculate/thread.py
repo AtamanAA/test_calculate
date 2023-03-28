@@ -1,15 +1,3 @@
-def pipe_thickness(yield_strength, test_pressure, 
-					min_outside_diameter, k_welding, 
-					k_industry, k_cycle):
-	
-	allowable_stresses = yield_strength / (k_industry * k_cycle)
-	thickness = (test_pressure * min_outside_diameter /
-				(2 * allowable_stresses * float(k_welding) + test_pressure))
-	thickness_round = round(thickness, 3)
-
-	return thickness_round
-
-
 class Thread:
 	def __init__(self, axial_force, bolt_yield_strength, nut_yield_strength, 
 					nominal_thread_diameter, thread_pitch, nut_active_height, nut_minimum_diameter,

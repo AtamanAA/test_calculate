@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import PipeHighPressureForm, ThreadForm
-from .services import Thread
 from .models import Material, PipeHighPressure, ThreadConnection
 
 
@@ -119,7 +118,7 @@ def pipe_detail(request):
 		else:
 			messages.error(request, ("Оберіть розрахунок!"))		
 			return redirect('pipe_results')
-	return redirect('index')
+	return redirect('login')
 
 
 def thread(request):
@@ -272,6 +271,4 @@ def thread_detail(request):
 		else:
 			messages.error(request, ("Оберіть розрахунок!"))		
 			return redirect('thread_results')
-	return redirect('index')
-
-
+	return redirect('login')
