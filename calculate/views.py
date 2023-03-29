@@ -41,8 +41,7 @@ def pipe_pressure(request):
 			thickness = pipe.thickness
 			outside_radius = pipe.outside_radius
 
-			if 'create' in request.POST:
-				# Save calculate in BD
+			if 'create' in request.POST:				
 				if PipeHighPressure.create(request.user, yield_strength, test_pressure, min_outside_diameter, 
 										k_industry, k_cycle, k_welding, name, description):
 					messages.success(request, ("Розрахунок успішно збережено!"))
@@ -138,8 +137,7 @@ def thread(request):
 
 	if request.method == 'POST':
 		form = ThreadForm(request.POST)
-		if form.is_valid():
-			# Form processing
+		if form.is_valid():			
 			axial_force = form.cleaned_data['axial_force']
 			bolt_yield_strength = form.cleaned_data['bolt_yield_strength']
 			nut_yield_strength = form.cleaned_data['nut_yield_strength']
@@ -152,13 +150,11 @@ def thread(request):
 			k_thread = form.cleaned_data['k_thread']
 			name = form.cleaned_data['name']
 			description = form.cleaned_data['description']
-
-			#Create thread instance
+			
 			thread = ThreadConnection.calculate(axial_force, bolt_yield_strength, nut_yield_strength, 
 							nominal_thread_diameter, thread_pitch, nut_active_height, 
 							nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread)
 
-			# Calculate safety factors
 			k_bolt_tension = thread.k_bolt_tension		
 			k_nut_tension = thread.k_nut_tension	
 			k_bolt_crush = thread.k_bolt_crush		
@@ -166,8 +162,7 @@ def thread(request):
 			k_bolt_shear = thread.k_bolt_shear		
 			k_nut_shear = thread.k_nut_shear			
 
-			if 'create' in request.POST:
-				# Save calculate in BD
+			if 'create' in request.POST:				
 				if ThreadConnection.create(request.user, axial_force, bolt_yield_strength, nut_yield_strength, 
 											nominal_thread_diameter, thread_pitch, nut_active_height, 
 											nut_minimum_diameter, bolt_hole_diameter, k_industry, k_thread, name, description):
