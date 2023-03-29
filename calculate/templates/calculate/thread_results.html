@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Різьба результати{% endblock %}
+
+{% block content %}
+
+    <section class="thread-results">
+
+        <div class="container">
+            
+            <h1>Результати разрахунку різьбового з’єднання</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+                <div class="col-12">
+                    {% if thread_results %}
+                        <table class="table">
+                            <tr class="table__header table__top-header">
+                                <th colspan="6">Параметри з’єднання</th>
+                                <th colspan="7">Коефіциенти запасу</th>
+                                <th id="edit-col"></th>
+                            </tr>
+                            <tr class="table__header">
+                                <th>Назва</th>
+                                <th class="vertical"><div class="vertical-title">Осьове навантаження</div></th>
+                                <th class="vertical"><div class="vertical-title">Межа текучості болта</div></th>
+                                <th class="vertical"><div class="vertical-title">Межа текучості гайки</div></th>
+                                <th class="vertical">Діаметр різьби</th>
+                                <th class="vertical">Шаг різьби</th>
+
+                                <th class="vertical adaptiv-hidden">Болт розтяг.</th>
+                                <th class="vertical adaptiv-hidden">Гайка розтяг.</th>
+                                <th class="vertical adaptiv-hidden">Болт зім'яття</th>
+                                <th class="vertical adaptiv-hidden">Гайка зім'яття</th>
+                                <th class="vertical adaptiv-hidden">Болт зріз</th>
+                                <th class="vertical adaptiv-hidden">Гайка зріз</th>
+
+                                <th class="vertical"><div class="vertical-title">Мінімальний запас</div></th>
+                                <th id="edit-col"></th>
+                            </tr>
+                            {% for thread in thread_results %}
+                                <tr>
+                                    <td class="table__name">{{ thread.name }}</td>                                    
+
+                                    <td class="table__condition">{{ thread.axial_force }}</td>
+                                    <td class="table__condition">{{ thread.bolt_yield_strength }}</td>
+                                    <td class="table__condition">{{ thread.nut_yield_strength }}</td>
+                                    <td class="table__condition">{{ thread.nominal_thread_diameter }}</td>
+                                    <td class="table__condition">{{ thread.thread_pitch }}</td>
+
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_bolt_tension }}</td>
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_nut_tension }}</td>
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_bolt_crush }}</td>
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_nut_crush }}</td>
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_bolt_shear }}</td>
+                                    <td class="table__condition adaptiv-hidden">{{ thread.k_nut_shear }}</td>
+
+                                    <td class="table__condition">{{ thread.k_min }}</td>
+
+                                    <td id="edit-col">
+                                        <form action="{% url 'thread_detail' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="threadid" value="{{ thread.id }}">                                        
+                                            <button class="detail-button">
+                                                <img id="pipe-detail-icon" class="detail-icon" src="/static/icons/pencil-square.svg" alt="edit">
+                                            </button> 
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}                        
+                        <h2>У Вас ще немає збережених розрахунків</h2>
+                    {% endif %}                    
+                </div>
+            </div>
+
+        </div>
+
+    </section>  
+
+{% endblock %}

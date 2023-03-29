@@ -8,10 +8,16 @@ $(document).ready(function(){
 if (document.title == "Різьба") {            
   $("#thread").addClass('active')                     
 }
+else if (document.title == "Зміна розрахунку різьби") {
+  $("#thread").addClass('active')                
+}
+else if (document.title == "Різьба результати") {
+  $("#thread").addClass('active')                
+}
 else if (document.title == "Труба") {
   $("#pipe").addClass('active')                
 }
-else if (document.title == "Результати разрахунку труби") {
+else if (document.title == "Труба результати") {
   $("#pipe").addClass('active')                
 }
 else if (document.title == "Зміна розрахунку труби") {

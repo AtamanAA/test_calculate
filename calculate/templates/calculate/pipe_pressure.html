@@ -13,11 +13,10 @@
             <div class="home__subtitle-line"></div>
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6 form">
+                    <h2>Параметри труби</h2>
                     <form action="{% url 'pipe_pressure' %}" method="post">
                         {% csrf_token %}
-
-                        <h2>Параметри труби</h2>
-
+                        
                         <div class="form__string">
                             {{ form.name.label }}                           
                             <div class="form__data form__data__name">

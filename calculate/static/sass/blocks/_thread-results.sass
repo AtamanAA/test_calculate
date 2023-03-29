@@ -1,4 +1,4 @@
-.pipe-results
+.thread-results
     min-height: 800px
     
     h1
@@ -16,9 +16,11 @@
             border: 1px solid black
             border-right-width: 2px
             padding: 3px
-            font-size: 20px
+            font-size: 16px
             text-align: center
             vertical-align: middle
+
+
         td
             
         .table
@@ -46,25 +48,40 @@
         
         #pipe-name
             max-height: 50px
-            overflow: hidden  
+            overflow: hidden 
+
+    .vertical        
+        writing-mode: vertical-rl
+        transform: rotate(180deg)
+        vertical-align: middle        
+
+    .vertical-title
+        max-height: 130px
+        margin: auto 0
 
 
 @media (max-width: 767px)
-    .pipe-results
+    .thread-results
         .table
             th, td
                 font-size: 16px
+            &__top-header
+                display: none
+            .adaptiv-hidden
+                display: none
 
 
 @media (max-width: 576px)
     h1
         font-size: 22px
-    .pipe-results
+    .thread-results
         .table
             th, td
-                font-size: 9px
+                font-size: 10px
             #pipe-detail-icon    
                 width: 9px
                 height: 9px
                 margin-top: -2px
-                margin-left: -6px  
+                margin-left: -6px
+        .vertical-title
+            max-height: 80px

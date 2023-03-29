@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Рахувати треба{% endblock %}
+
+{% block content %}
+    <section class="error-404">
+        <div class="container">            
+            <h1>Йой!</h1>
+            <div class="home__subtitle-line"></div>
+            <h2>404 Сторінка не знайдена</h2>
+            <p>Спробуйте інше посилання або перейдіть <a href="{% url 'index' %}">Головну</a></p>
+        </div>
+        
+    </section>
+
+{% endblock %}
