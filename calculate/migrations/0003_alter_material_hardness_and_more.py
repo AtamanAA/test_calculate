@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('calculate', '0002_remove_material_steel_type'),
+        ("calculate", "0002_remove_material_steel_type"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='material',
-            name='hardness',
-            field=models.FloatField(help_text='HB'),
+            model_name="material",
+            name="hardness",
+            field=models.FloatField(help_text="HB"),
         ),
         migrations.AlterField(
-            model_name='material',
-            name='yield_strenght',
-            field=models.FloatField(help_text='МПа'),
+            model_name="material",
+            name="yield_strenght",
+            field=models.FloatField(help_text="МПа"),
         ),
     ]

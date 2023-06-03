@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('calculate', '0005_alter_pipehighpressure_k_welding'),
+        ("calculate", "0005_alter_pipehighpressure_k_welding"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipehighpressure',
-            name='description',
+            model_name="pipehighpressure",
+            name="description",
             field=models.TextField(blank=True, max_length=128),
         ),
         migrations.AlterField(
-            model_name='pipehighpressure',
-            name='name',
+            model_name="pipehighpressure",
+            name="name",
             field=models.CharField(max_length=20),
         ),
     ]

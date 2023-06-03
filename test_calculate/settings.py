@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0sl29z*lr8(=#l7yba6b(w7l!h=wbna+1@6d8azm9-f1f98y7b'
+SECRET_KEY = "django-insecure-0sl29z*lr8(=#l7yba6b(w7l!h=wbna+1@6d8azm9-f1f98y7b"
 
 # The `DYNO` env var is set on Heroku CI, but it's not a real Heroku app, so we have to
 # also explicitly exclude CI:
@@ -43,8 +43,8 @@ if IS_HEROKU_APP:
     ALLOWED_HOSTS = ["*"]
 else:
     ALLOWED_HOSTS = [
-        '127.0.0.1',
-        'atamanaa.pythonanywhere.com',
+        "127.0.0.1",
+        "atamanaa.pythonanywhere.com",
     ]
 
 # Application definition
@@ -52,53 +52,51 @@ else:
 INSTALLED_APPS = [
     # Use WhiteNoise's runserver implementation instead of the Django default, for dev-prod parity.
     "whitenoise.runserver_nostatic",
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    #My app
-    'calculate',
-    'authentication',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # My app
+    "calculate",
+    "authentication",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
     # Django doesn't support serving static assets in a production-ready way, so we use the
     # excellent WhiteNoise package to do so instead. The WhiteNoise middleware must be listed
     # after Django's `SecurityMiddleware` so that security redirects are still performed.
     # See: https://whitenoise.readthedocs.io
-
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'test_calculate.urls'
+ROOT_URLCONF = "test_calculate.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'test_calculate.wsgi.application'
+WSGI_APPLICATION = "test_calculate.wsgi.application"
 
 
 # Database
@@ -133,16 +131,16 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -150,9 +148,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -163,11 +161,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

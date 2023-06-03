@@ -6,31 +6,48 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('calculate', '0006_alter_pipehighpressure_description_and_more'),
+        ("calculate", "0006_alter_pipehighpressure_description_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ThreadConnection',
+            name="ThreadConnection",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=20)),
-                ('description', models.TextField(blank=True, max_length=128)),
-                ('axial_force', models.FloatField()),
-                ('bolt_yield_strength', models.FloatField(default=300)),
-                ('nut_yield_strength', models.FloatField(default=300)),
-                ('nominal_thread_diameter', models.FloatField()),
-                ('thread_pitch', models.FloatField()),
-                ('nut_active_height', models.FloatField()),
-                ('nut_minimum_diameter', models.FloatField()),
-                ('bolt_hole_diameter', models.FloatField()),
-                ('k_industry', models.FloatField()),
-                ('k_thread', models.FloatField(choices=[(0.8, 'Метрична'), (0.65, 'Трапецевидна'), (0.5, 'Прямокутна')], default=1, max_length=40)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=20)),
+                ("description", models.TextField(blank=True, max_length=128)),
+                ("axial_force", models.FloatField()),
+                ("bolt_yield_strength", models.FloatField(default=300)),
+                ("nut_yield_strength", models.FloatField(default=300)),
+                ("nominal_thread_diameter", models.FloatField()),
+                ("thread_pitch", models.FloatField()),
+                ("nut_active_height", models.FloatField()),
+                ("nut_minimum_diameter", models.FloatField()),
+                ("bolt_hole_diameter", models.FloatField()),
+                ("k_industry", models.FloatField()),
+                (
+                    "k_thread",
+                    models.FloatField(
+                        choices=[
+                            (0.8, "Метрична"),
+                            (0.65, "Трапецевидна"),
+                            (0.5, "Прямокутна"),
+                        ],
+                        default=1,
+                        max_length=40,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

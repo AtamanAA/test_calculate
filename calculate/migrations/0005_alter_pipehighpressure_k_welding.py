@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('calculate', '0004_pipehighpressure'),
+        ("calculate", "0004_pipehighpressure"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='pipehighpressure',
-            name='k_welding',
-            field=models.FloatField(choices=[(1, 'Безшовна'), (0.6, 'Електрозварювальна')], default=1, max_length=40),
+            model_name="pipehighpressure",
+            name="k_welding",
+            field=models.FloatField(
+                choices=[(1, "Безшовна"), (0.6, "Електрозварювальна")],
+                default=1,
+                max_length=40,
+            ),
         ),
     ]

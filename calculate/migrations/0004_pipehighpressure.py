@@ -6,27 +6,40 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('calculate', '0003_alter_material_hardness_and_more'),
+        ("calculate", "0003_alter_material_hardness_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PipeHighPressure',
+            name="PipeHighPressure",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=40)),
-                ('description', models.TextField(blank=True, max_length=256)),
-                ('yield_strength', models.FloatField(default=300)),
-                ('test_pressure', models.FloatField()),
-                ('min_outside_diameter', models.FloatField()),
-                ('k_industry', models.FloatField(default=1.3)),
-                ('k_cycle', models.FloatField(default=1)),
-                ('k_welding', models.CharField(choices=[(1, 'Безшовна'), (0.6, 'Електрозварювальна')], default=1, max_length=40)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=40)),
+                ("description", models.TextField(blank=True, max_length=256)),
+                ("yield_strength", models.FloatField(default=300)),
+                ("test_pressure", models.FloatField()),
+                ("min_outside_diameter", models.FloatField()),
+                ("k_industry", models.FloatField(default=1.3)),
+                ("k_cycle", models.FloatField(default=1)),
+                (
+                    "k_welding",
+                    models.CharField(
+                        choices=[(1, "Безшовна"), (0.6, "Електрозварювальна")],
+                        default=1,
+                        max_length=40,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

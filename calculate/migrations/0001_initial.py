@@ -4,23 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Material',
+            name="Material",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=40)),
-                ('steel_type', models.CharField(max_length=40)),
-                ('type', models.CharField(max_length=40)),
-                ('condition', models.CharField(blank=True, max_length=40)),
-                ('hardness', models.FloatField()),
-                ('yield_strenght', models.FloatField()),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=40)),
+                ("steel_type", models.CharField(max_length=40)),
+                ("type", models.CharField(max_length=40)),
+                ("condition", models.CharField(blank=True, max_length=40)),
+                ("hardness", models.FloatField()),
+                ("yield_strenght", models.FloatField()),
             ],
         ),
     ]
