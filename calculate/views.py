@@ -41,7 +41,8 @@ def pipe_pressure(request):
 			thickness = pipe.thickness
 			outside_radius = pipe.outside_radius
 
-			if 'create' in request.POST:				
+			if 'create' in request.POST:
+				
 				if PipeHighPressure.create(request.user, yield_strength, test_pressure, min_outside_diameter, 
 										k_industry, k_cycle, k_welding, name, description):
 					messages.success(request, ("Розрахунок успішно збережено!"))
