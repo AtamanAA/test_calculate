@@ -134,3 +134,4 @@ dmypy.json
 # that should not change!
 # used in self-checking
 tc_env/
+calculate/__pycache__/
