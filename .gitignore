@@ -135,3 +135,4 @@ dmypy.json
 # used in self-checking
 tc_env/
 **/__pycache__/
+/screenshots/
