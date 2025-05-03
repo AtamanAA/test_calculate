@@ -27,3 +27,7 @@
     ```
 5. В браузері перейти на головну сторінку
     http://127.0.0.1:8000/
+
+
+For autocomplete Sass files to style.css use FileWatcher in PyCharm
+https://www.jetbrains.com/help/pycharm/transpiling-sass-less-and-scss-to-css.html
