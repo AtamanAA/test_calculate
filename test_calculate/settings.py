@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # My app
     "calculate",
     "authentication",
+    "instructions",
 ]
 
 MIDDLEWARE = [

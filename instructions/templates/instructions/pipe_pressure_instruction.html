@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Моделюваня труби високого тиску{% endblock %}
+
+{% block content %}
+
+    <section class="instruction">
+        <div class="container">
+            <h1>Розрахунок міцності труби високого тиску в SolidWorks Simulation</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 ">
+                    <div class="col">
+                        <h2>Зміст</h2>
+                        <ol>
+                            <li>Постановка задачі</li>
+                            <li>Підготовка моделі</li>
+                            <li>Створення нового розрахунку</li>
+                            <li>Налаштування граничних умов</li>
+                            <li>Навантаження моделі</li>
+                            <li>Налаштування сітки</li>
+                            <li>Запуск розрахунку</li>
+                            <li>Налаштування епюр та аналіз результату</li>
+                            <li>Висновок</li>
+                        </ol>
+                    </div>
+
+                    <div class="col d-flex align-items-center">
+                        <img id="pipe_pressure" src="{% static 'images/pipe_pressure_simulation_preview.png' %}" alt="pipe_pressure">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>1. Постановка задачі</h2>
+                        <p>
+                            Необхідно визначити міцність регулярної ділянки труби, що сприймає внутрішній тиск. Даний випадок можна використати для оцінки міцності довгих труб без урахування їх кріплення з іншою конструкцією.
+                        </p>
+                        <p>Параметри:</p>
+
+                        <ul class="param">
+                          <li>D - зовнішній діаметр</li>
+                          <li>t - товщина стінки</li>
+                          <li>p - тиск</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/Pipe_pressure_calculation_scheme.png' %}" alt="pipe pressure scheme">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>2. Підготовка моделі</h2>
+                        <p>
+                            Створимо твердотільну модель половини труби із зовнішнім діаметром (D) 100 мм, товщиною стінки (t) 5 мм та довжиною (L) 300 мм.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/model_preparing.png' %}" alt="pipe model">
+                    </div>
+
+                    <div>
+                        <p>Призначимо матеріал для труб AISI 416L.</p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/aply_material.png' %}" alt="apply material">
+                    </div>
+
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>3. Створення нового розрахунку</h2>
+                        <p>
+                            Відкриємо вкладку <em>"Simulation"</em>  у верхньому меню і виберемо <em>"New Study"</em>. У меню вибираємо <em>"Static"</em> і підтверджуємо вибір. Після чого в нижній частині з'явиться вкладка з назвою розрахунку <em>"Static 1"</em> і деревом налаштувань розрахунку.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/new_calculation.png' %}" alt="new calculation">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>4. Налаштування граничних умов</h2>
+                        <p>
+                            а) Один із торців труби закріплюємо як ковзну опору — для цього в меню <em>"Fixtures Advisor"</em> вибираємо <em>"Roller/Slider"</em> і застосовуємо до торця труби.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/boundary_condition.png' %}" alt="boundary_condition">
+                    </div>
+                    <div>
+                        <p>
+                            б) Обмежимо можливість повороту для зовнішнього діаметра  (він зможе розширюватися, але не зможе обертатися, що необхідно для мінімально достатнього закріплення моделі).  У меню <em>"Fixture Advisor"</em> вибираємо розділ <em>"Advanced Fixtures"</em>. Далі обираємо <em>"On Cylindrical Faces"</em> і призначаємо для зовнішнього діаметра обмеження на обертання.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/boundary_condition_2.png' %}" alt="boundary_condition_2">
+                    </div>
+                    <div>
+                        <p>
+                            в) Налаштуємо симетричність моделі відносно площини перерізу.  У меню <em>"Fixture Advisor"</em> вибираємо розділ <em>"Advanced Fixtures"</em>. Далі обираємо "Symmetry" і вказуємо площини перерізу труби.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/boundary_condition_3.png' %}" alt="boundary_condition_3">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>5. Навантаження моделі</h2>
+                        <p>
+                            У меню <em>"External Loads Advisor"</em> вибираємо розділ <em>"Pressure"</em>. Далі обираємо внутрішню поверхню труби та задаємо тиск (p) величиною 10 МПа.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/load_model.png' %}" alt="load_model">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>6. Налаштування сітки</h2>
+                        <p>
+                            У меню <em>"Run This Study"</em> вибираємо розділ <em>"Create Mesh"</em>. Далі задаємо параметри сітки, наприклад, максимальний розмір елемента. Встановлюємо значення 4 мм.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/mesh_setup_1.png' %}" alt="mesh_setup_1">
+                    </div>
+                    <div>
+                        <p>
+                            У результаті отримуємо згенеровану сітку на моделі.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/mesh_setup_2.png' %}" alt="mesh_setup_2">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>7. Запуск розрахунку</h2>
+                        <p>
+                            У меню <em>"Run This Study"</em> вибираємо розділ <em>"Run This Study"</em>.  У результаті отримуємо три стандартні епюри (Stress, Displacement, Strain).
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/run_calculation.png' %}" alt="run_calculation">
+                    </div>
+
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>8. Налаштування епюр та аналіз результату</h2>
+                        <p>
+                            За потреби можна налаштувати відображення епюр.  Встановлюємо одиниці вимірювання напружень у МПа та формат значень — з плаваючою комою.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/plot_1.png' %}" alt="plot_1">
+                    </div>
+                    <div>
+                        <p>
+                            Також можемо додати епюру запасу міцності.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/plot_2.png' %}" alt="plot_2">
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure/plot_3.png' %}" alt="plot_3">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>9. Висновок</h2>
+                        <p>Максимальне діюче напруження складає 100,81 МПа.</p>
+                        <p>Граничний коефіцієнт текучості матеріалу AISI 316L становить 170 МПа.</p>
+                        <p>
+                            Розрахунковий коефіцієнт запасу для статичного навантаження регулярної ділянки безшовної труби буде рівний 170/100,81 = 1,68. Саме це значення ми бачимо як мінімальне на епюрі запасу міцності.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>  
+
+{% endblock %}

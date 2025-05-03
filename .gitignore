@@ -136,3 +136,4 @@ dmypy.json
 tc_env/
 **/__pycache__/
 /screenshots/
+/staticfiles/

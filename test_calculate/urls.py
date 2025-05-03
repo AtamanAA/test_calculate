@@ -22,4 +22,5 @@ urlpatterns = [
     path("", include("calculate.urls")),
     path("authentication/", include("django.contrib.auth.urls")),
     path("authentication/", include("authentication.urls")),
+    path('instructions/', include('instructions.urls'))
 ]
