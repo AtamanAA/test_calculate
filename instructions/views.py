@@ -10,3 +10,7 @@ def instructions(request):
 def pipe_pressure(request):
     """Pipe pressure instruction"""
     return render(request, "instructions/pipe_pressure_instruction.html")
+
+def pipe_pressure_assembly(request):
+    """Pipe pressure for assembly instruction"""
+    return render(request, "instructions/pipe_pressure_assembly_instruction.html")

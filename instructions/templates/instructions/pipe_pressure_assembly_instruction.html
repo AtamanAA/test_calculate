@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Моделюваня труби високого тиску{% endblock %}
+
+{% block content %}
+
+    <section class="instruction">
+        <div class="container">
+            <h1>Розрахунок міцності модуля високого тиску в SolidWorks Simulation</h1>
+            <div class="home__subtitle-line"></div>
+            <div class="row">
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 ">
+                    <div class="col">
+                        <h2>Зміст</h2>
+                        <ol>
+                            <li>Постановка задачі</li>
+                            <li>Підготовка моделі</li>
+                            <li>Створення нового розрахунку</li>
+                            <li>Налаштування граничних умов</li>
+                            <li>Навантаження моделі</li>
+                            <li>Налаштування сітки</li>
+                            <li>Запуск розрахунку</li>
+                            <li>Налаштування епюр та аналіз результату</li>
+                            <li>Висновок</li>
+                        </ol>
+                    </div>
+
+                    <div class="col d-flex align-items-center">
+                        <img id="pipe_pressure_assembly" src="{% static 'images/pipe_pressure_assembly/Pipe_assembly_pressure_preview.png' %}" alt="pipe_pressure_assembly">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>1. Постановка задачі</h2>
+                        <p>
+                            Потрібно визначити несучу здатність циліндричної камери високого тиску, закритої з обох торців різьбовими заглушками та проміжною з’єднувальною муфтою.
+                        </p>
+                        <p>
+                            Цей розрахунок застосовується для оцінки міцності елементів насосів або технологічного оснащення з високим надлишковим внутрішнім тиском.
+                        </p>
+                        <p>Припущення:</p>
+
+                        <ul>
+                          <li>У цьому прикладі не оцінюється несуча здатність різьбових з'єднань;</li>
+                          <li>Не враховується момент затягування різьбових з’єднань;</li>
+                          <li>Не враховується контактний тиск між поверхнями.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/Pipe_assembly_pressure_load_scheme 2.png' %}" alt="pipe_pressure_assembly_scheme">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>2. Підготовка моделі</h2>
+                        <p>
+                            а) Розділимо трубу на кілька твердих тіл по площині другого ущільнювального кільця за допомогою команди “Split”;
+                        </p>
+                        <p>
+                            б) Щоб уникнути контактних з’єднань і прискорити розрахунок, зробимо зазор між торцями елементів у 1 мм у збірці моделі;
+                        </p>
+                        <p>
+                            в) Також змоделюємо розрахунковий зазор між ущільнювальними поверхнями (у цьому прикладі 0,25 мм), що в подальшому також усуне необхідність налаштовувати контактні з’єднання на цих поверхнях;
+                        </p>
+                        <p>
+                            г) Для зменшення кількості елементів у фінальній розрахунковій сітці використаємо симетрію конструкції, тому створимо половинну збірку.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/model_preparing.png' %}" alt="module_model">
+                        <img src="{% static 'images/pipe_pressure_assembly/model_preparing_2.png' %}" alt="module_model">
+                    </div>
+
+                    <div>
+                        <p>Призначимо матеріал для заглушки та муфти — EN 1.4031</p>
+                        <p>Призначимо матеріал для труб — EN 1.0045 (S355JR)</p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/material_1.png' %}" alt="apply material">
+                        <img src="{% static 'images/pipe_pressure_assembly/material_2.png' %}" alt="apply material">
+                    </div>
+
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>3. Створення нового розрахунку</h2>
+                        <p>
+                            Відкриємо вкладку «Simulation» у верхньому меню та оберемо «New Study». У меню, що з’явиться, вибираємо «Static» і підтверджуємо вибір. Після цього внизу з’явиться вкладка з назвою розрахунку «Static 1» та деревом налаштувань розрахунку.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/new_calculation.png' %}" alt="new calculation">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>4. Налаштування граничних умов</h2>
+                        <p>
+                            а) Жорстко зафіксуємо торець однієї з заглушок
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/boundary_condition.png' %}" alt="boundary_condition">
+                    </div>
+                    <div>
+                        <p>
+                            б) Налаштуємо симетрію моделі по площині перерізу. Виберемо в меню «Fixture Advisor» розділ «Advanced Fixtures». Далі обираємо «Symmetry» і вибираємо площини перерізу труб та інших деталей.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/boundary_condition_2.png' %}" alt="boundary_condition_2">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>5. Навантаження моделі</h2>
+                        <p>
+                            Виберемо в меню «External Loads Advisor» розділ «Pressure». Далі вибираємо внутрішні поверхні труби та муфт і призначаємо тиск (p) величиною 10 МПа. Для канавок під ущільнювальні кільця задаємо дію тиску лише на поверхні першої канавки (імітуємо випадок, коли перше кільце пошкоджене).
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/load_model.png' %}" alt="load_model">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>6. Налаштування сітки</h2>
+                        <p>
+                            Виберемо в меню «Run this study» розділ «Create Mesh». Оберемо тип сітки «Curvature-based mesh» і призначимо розмір елемента 5 мм. У результаті отримуємо згенеровану сітку на моделі.
+                        </p>
+                    </div>
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/mesh_setup_1.png' %}" alt="mesh_setup_1">
+                    </div>
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>7. Запуск розрахунку</h2>
+                        <p>
+                            У меню <em>"Run This Study"</em> вибираємо розділ <em>"Run This Study"</em>.  У результаті отримуємо три стандартні епюри (Stress, Displacement, Strain).
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/run_calculation.png' %}" alt="run_calculation">
+                    </div>
+
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>8. Налаштування епюр та аналіз результату</h2>
+                        <p>
+                            За потреби можна налаштувати відображення епюр.  Встановлюємо одиниці вимірювання напружень у МПа та формат значень — з плаваючою комою.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/plot_2.png' %}" alt="plot_1">
+                    </div>
+                    <div>
+                        <p>
+                            Також можемо додати епюру запасу міцності.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/plot_3.png' %}" alt="plot_2">
+                    </div>
+
+                    <div>
+                        <p>
+                            За допомогою інструменту «Probe» визначимо максимальні діючі напруження для кожної деталі.
+                        </p>
+                    </div>
+
+                    <div>
+                        <img src="{% static 'images/pipe_pressure_assembly/plot_4.png' %}" alt="plot_3">
+                    </div>
+
+                </div>
+
+                <div class="instruction_chapter">
+                    <div>
+                        <h2>9. Висновок</h2>
+                        <p>Максимальні діючі напруження в деталях:</p>
+                        <ul class="param">
+                          <li>Труба: 124,96 МПа;</li>
+                          <li>Муфта: 136,9 МПа;</li>
+                          <li>Заглушка: 64,61 МПа.</li>
+                        </ul>
+
+                        <p>Визначимо розрахункові коефіцієнти запасу:</p>
+                        <ul class="param">
+                          <li>Труба: 275 МПа / 124,96 МПа = 2,2;</li>
+                          <li>Муфта: 700 / 136,9 МПа = 5,1;</li>
+                          <li>Заглушка: 700 МПа / 64,61 МПа = 10,8.</li>
+                        </ul>
+                        <p>
+                            Схожі значення ми бачимо на епюрі запасу міцності. Для всіх елементів конструкції мінімальний запас міцності перевищує 2. Чи забезпечена несуча здатність конструкції або вузла — залежить від ваших галузевих стандартів.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>  
+
+{% endblock %}
